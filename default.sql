@@ -41,7 +41,7 @@ CREATE TABLE UserInfo (
 	Playtime FLOAT,
 	UserID INTEGER PRIMARY KEY,
 	UserLocation CHAR(50),
-	Phone# CHAR(20),
+	PhoneNum CHAR(20),
     Profile_URL CHAR(100) NOT NULL,
 	FOREIGN KEY (Profile_URL) REFERENCES UserProfile ON DELETE CASCADE
 );
