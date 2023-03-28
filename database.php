@@ -18,20 +18,31 @@
 
   <html>
     <head>
-        <title>CPSC 304 PHP/Oracle Demonstration</title>
+        <title>CPSC 304 PHP/Steam Database</title>
     </head>
 
     <body>
-        <h2>Reset</h2>
-        <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p>
+        <!-- <h2>Reset</h2> -->
+        <!-- <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p> -->
+
+        <!-- <form method="POST" action="database.php"> -->
+            <!-- if you want another page to load after the button is clicked, you have to specify that page in the action parameter -->
+            <!-- <input type="hidden" id="resetTablesRequest" name="resetTablesRequest"> -->
+            <!-- <p><input type="submit" value="Reset" name="reset"></p> -->
+        <!-- </form> -->
+
+        <!-- <hr /> -->
+
+        <h2>Initialize</h2>
+        <p>If this is the first time you're running this page, please click the button below to see our default data!</p>
 
         <form method="POST" action="database.php">
-            <!-- if you want another page to load after the button is clicked, you have to specify that page in the action parameter -->
-            <input type="hidden" id="resetTablesRequest" name="resetTablesRequest">
-            <p><input type="submit" value="Reset" name="reset"></p>
+            <input type="hidden" id="initializeTablesRequest" name="initializeTablesRequest">
+            <p><input type="submit" value="Initialize" name="initializeSubmit"></p>
         </form>
 
         <hr />
+
 
         <h2>Insert Values into DemoTable</h2>
         <form method="POST" action="database.php"> <!--refresh page when submitted-->
@@ -58,8 +69,6 @@
 
         <hr />
 
-
-
         
         <h2>Delete a User</h2>
         <form method="POST" action="database.php"> <!--refresh page when submitted-->
@@ -68,8 +77,6 @@
             <input type="submit" value="Delete" name="deleteSubmit"></p>
         </form>
         <hr />
-
-
 
 
         <h2>Count the Tuples in DemoTable</h2>
@@ -229,6 +236,7 @@
             // you need the wrap the old name and new name values with single quotations
             executePlainSQL("UPDATE UserInfo SET UserLocation='" . $new_location . "' WHERE UserID='" . $user_id . "'");
             OCICommit($db_conn);
+            printResult();
         }
 
         function handleResetRequest() {
@@ -239,23 +247,6 @@
             // Create new table
             echo "<br> creating new table <br>";
             executePlainSQL("CREATE TABLE demoTable (id int PRIMARY KEY, name char(30))");
-            OCICommit($db_conn);
-        }
-
-        function handleInsertRequest() {
-            global $db_conn;
-
-            //Getting the values from user and insert data into the table
-            $tuple = array (
-                ":bind1" => $_POST['insNo'],
-                ":bind2" => $_POST['insName']
-            );
-
-            $alltuples = array (
-                $tuple
-            );
-
-            executeBoundSQL("insert into demoTable values (:bind1, :bind2)", $alltuples);
             OCICommit($db_conn);
         }
 
@@ -282,7 +273,11 @@
 
             executeBoundSQL("DELETE FROM UserInfo u WHERE u.UserID = :UserID", $alltuples);
             OCICommit($db_conn);
-            echo printResult();
+            printResult();
+        }
+
+        function handleInitializeRequest() {
+            printResult();
         }
 
         // HANDLE ALL POST ROUTES
@@ -297,6 +292,8 @@
                     handleInsertRequest();
                 } else if (array_key_exists('deleteQueryRequest', $_POST)) {
                     handleDeleteRequest();
+                } else if (array_key_exists('initializeTablesRequest', $_POST)) {
+                    handleInitializeRequest();
                 }
 
                 disconnectFromDB();
@@ -315,7 +312,7 @@
             }
         }
 
-		if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['deleteSubmit'])) {
+		if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['deleteSubmit']) || isset($_POST['initializeSubmit'])) {
             handlePOSTRequest();
         } else if (isset($_GET['countTupleRequest'])) {
             handleGETRequest();
