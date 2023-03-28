@@ -659,7 +659,7 @@ VALUES ('Game is not in my game library', '06-SEP-2020', 5, 'Resolved');
 
 INSERT
 INTO SupportTicketRequest
-VALUES (1, 'Gameplay or technical issues', '20-JAN-2023', 3);
+VALUES (1, 'Gameplay or technical issues', '23-JAN-2023', 3);
 
 INSERT
 INTO SupportTicketRequest
@@ -675,4 +675,4 @@ VALUES (4, 'Game Refund', '23-JAN-2023', 2);
 
 INSERT
 INTO SupportTicketRequest
-VALUES (5, 'Game is not in my game library', '09-SEP-2020', 5);
+VALUES (5, 'Game is not in my game library', '06-SEP-2020', 5);
