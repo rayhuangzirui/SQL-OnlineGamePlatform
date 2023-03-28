@@ -44,6 +44,7 @@
 
         <hr />
 
+        <!--Changed interpretation showing on the webpage-->
         <h2>Update Location in UserInfo table</h2>
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
