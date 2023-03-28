@@ -44,13 +44,13 @@
 
         <hr />
 
-        <h2>Update Name in DemoTable</h2>
+        <h2>Update Location in UserInfo table</h2>
         <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
-        <form method="POST" action="oracle-test.php"> <!--refresh page when submitted-->
+        <form method="POST" action="database.php"> <!--refresh page when submitted-->
             <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-            Old Name: <input type="text" name="oldName"> <br /><br />
-            New Name: <input type="text" name="newName"> <br /><br />
+            UserID: <input type="text" name="userID"> <br /><br />
+            New Location: <input type="text" name="newLoc"> <br /><br />
 
             <input type="submit" value="Update" name="updateSubmit"></p>
         </form>
@@ -218,14 +218,15 @@
             OCILogoff($db_conn);
         }
 
+        // update location by user ID
         function handleUpdateRequest() {
             global $db_conn;
 
-            $old_name = $_POST['oldName'];
-            $new_name = $_POST['newName'];
+            $user_id = $_POST['userID'];
+            $new_location = $_POST['newLoc'];
 
             // you need the wrap the old name and new name values with single quotations
-            executePlainSQL("UPDATE demoTable SET name='" . $new_name . "' WHERE name='" . $old_name . "'");
+            executePlainSQL("UPDATE UserInfo SET UserLocation='" . $new_location . "' WHERE UserID='" . $user_id . "'");
             OCICommit($db_conn);
         }
 
