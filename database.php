@@ -80,6 +80,17 @@
     </form>
     <hr />
 
+    <h2>Wanna search for a specific genre?</h2>
+    <form method="GET" action="database.php"> <!--refresh page when submitted-->
+        <input type="hidden" id="joinQueryRequest" name="joinQueryRequest">
+        Genre : <select name="joinGenre">
+                    <option value='RPG'>RPG</option>  
+                    <option value='Action'>Action</option>  
+                </select> <br /><br />
+        <input type="submit" value="Find" name="joinSubmit"></p>
+    </form>
+    <hr />
+
 
     <h2>Count the Tuples in DemoTable</h2>
     <form method="GET" action="oracle-test.php"> <!--refresh page when submitted-->
@@ -330,6 +341,36 @@
         OCICommit($db_conn);
     }
 
+
+    function handleJoinRequest() {
+        global $db_conn;
+
+        $result = executePlainSQL(
+            "   SELECT DISTINCT gu.Name, gu.URL
+                FROM GameInfo gi,BelongsTo bt, GenreDescription gd, GenreName gn, GameURL gu
+                WHERE bt.GID = gi.GID AND bt.GeID = gd.GeID AND gd.Description = gn.Description AND gu.URL = gi.URL AND gn.Name = '{$_GET['joinGenre']}'
+            ");
+        OCICommit($db_conn);
+        echo "<table border = 1 cellspacing = 0 width = 400 height = 300>";
+        echo "
+            <caption> Game Found </caption>
+            <tr>
+                <th>Game Name</th>
+                <th>Game URL</th>
+            </tr>
+        ";
+        while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+            echo "
+                    <tr>
+                        <td>" . $row[0] . "</td>
+                        <td>" . $row[1] . "</td>
+                    </tr>
+                ";
+        }
+        echo "</table>";
+    }
+
+
     function handleCountRequest()
     {
         global $db_conn;
@@ -391,6 +432,8 @@
         if (connectToDB()) {
             if (array_key_exists('countTuples', $_GET)) {
                 handleCountRequest();
+            } else if (array_key_exists('joinSubmit', $_GET)) {
+                handleJoinRequest();
             }
 
             disconnectFromDB();
@@ -399,7 +442,7 @@
 
     if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['deleteSubmit']) || isset($_POST['initializeSubmit'])) {
         handlePOSTRequest();
-    } else if (isset($_GET['countTupleRequest'])) {
+    } else if (isset($_GET['countTupleRequest']) || isset($_GET['joinQueryRequest'])) {
         handleGETRequest();
     }
     ?>
