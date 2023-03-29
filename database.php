@@ -49,7 +49,7 @@
         <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
         ID: <input type="number" name="UserID"> <br /><br /> <!--number input-->
         Location: <input type="text" name="UserLocation"> <br /><br />
-        Phone Number (XX-XXXX-XXXX): <input type="text" name="PhoneNum"> <br /><br />
+        Phone Number: <input type="text" name="PhoneNum"> <br /><br />
         User name: <input type="text" name="User_name"> <br /><br />
 
         <input type="submit" value="Insert" name="insertSubmit"></p>
@@ -181,8 +181,9 @@
     {
         $userInfo = executePlainSQL("SELECT * FROM UserInfo");
 
-        echo "<table>";
+        echo "<table border = 1 cellspacing = 0 width = 400 height = 300>";
         echo "
+                <caption> UserInfo </caption>
                 <tr>
                     <th>User ID</th>
                     <th>User Location</th>
@@ -206,14 +207,15 @@
         }
         echo "</table>";
 
+        
         $UserProfile = executePlainSQL("SELECT * FROM UserProfile");
 
-        echo "<table>";
+        echo "<br><br> <table border = 1 cellspacing = 0 width = 400 height = 300>";
         echo "
+                <caption> UserProfile </caption>
                 <tr>
                     <th>Profile_URL</th>
                     <th>User_name</th>
-                    <th>Phone Number</th>
                     <th>Creation_Date</th>
                     <th>Account_Level</th>
                 </tr>
@@ -227,7 +229,6 @@
                         <td>" . $row[1] . "</td>
                         <td>" . $row[2] . "</td>
                         <td>" . $row[3] . "</td>
-                        <td>" . $row[4] . "</td>
                     </tr>
                 ";
         }
@@ -300,6 +301,7 @@
         executeBoundSQL("insert into UserProfile values (:Profile_URL, :User_name, :Creation_Date, :Account_Level)", $alltuples1);
         executeBoundSQL("insert into UserInfo values (:Playtime, :UserID, :UserLocation, :PhoneNum, :Profile_URL)", $alltuples);
         OCICommit($db_conn);
+        printResult();
     }
 
     // update location by user ID
