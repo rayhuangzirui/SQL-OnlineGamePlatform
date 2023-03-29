@@ -16,167 +16,173 @@
   extension.  You must also change the username and password on the
   OCILogon below to be your ORACLE username and password -->
 
-  <html>
-    <head>
-        <title>CPSC 304 PHP/Steam Database</title>
-    </head>
+<html>
 
-    <body>
-        <!-- <h2>Reset</h2> -->
-        <!-- <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p> -->
+<head>
+    <title>CPSC 304 PHP/Steam Database</title>
+</head>
 
-        <!-- <form method="POST" action="database.php"> -->
-            <!-- if you want another page to load after the button is clicked, you have to specify that page in the action parameter -->
-            <!-- <input type="hidden" id="resetTablesRequest" name="resetTablesRequest"> -->
-            <!-- <p><input type="submit" value="Reset" name="reset"></p> -->
-        <!-- </form> -->
+<body>
+    <!-- <h2>Reset</h2> -->
+    <!-- <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p> -->
 
-        <!-- <hr /> -->
+    <!-- <form method="POST" action="database.php"> -->
+    <!-- if you want another page to load after the button is clicked, you have to specify that page in the action parameter -->
+    <!-- <input type="hidden" id="resetTablesRequest" name="resetTablesRequest"> -->
+    <!-- <p><input type="submit" value="Reset" name="reset"></p> -->
+    <!-- </form> -->
 
-        <h2>Initialize</h2>
-        <p>If this is the first time you're running this page, please click the button below to see our default data!</p>
+    <!-- <hr /> -->
 
-        <form method="POST" action="database.php">
-            <input type="hidden" id="initializeTablesRequest" name="initializeTablesRequest">
-            <p><input type="submit" value="Initialize" name="initializeSubmit"></p>
-        </form>
+    <h2>Initialize</h2>
+    <p>If this is the first time you're running this page, please click the button below to see our default data!</p>
 
-        <hr />
+    <form method="POST" action="database.php">
+        <input type="hidden" id="initializeTablesRequest" name="initializeTablesRequest">
+        <p><input type="submit" value="Initialize" name="initializeSubmit"></p>
+    </form>
 
+    <hr />
 
-        <h2>Insert Values into DemoTable</h2>
-        <form method="POST" action="database.php"> <!--refresh page when submitted-->
-            <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-            Number: <input type="text" name="insNo"> <br /><br />
-            Name: <input type="text" name="insName"> <br /><br />
+    <h2>Insert Values into DemoTable</h2>
+    <form method="POST" action="database.php"> <!--refresh page when submitted-->
+        <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
+        ID: <input type="number" name="UserID"> <br /><br /> <!--number input-->
+        Location: <input type="text" name="UserLocation"> <br /><br />
+        Phone Number (XX-XXXX-XXXX): <input type="text" name="PhoneNum"> <br /><br />
+        User name: <input type="text" name="User_name"> <br /><br />
 
-            <input type="submit" value="Insert" name="insertSubmit"></p>
-        </form>
+        <input type="submit" value="Insert" name="insertSubmit"></p>
+    </form>
 
-        <hr />
+    <hr />
 
-        <!--Changed interpretation showing on the webpage-->
-        <h2>Update Location in UserInfo table</h2>
-        <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
+    <!--Changed interpretation showing on the webpage-->
+    <h2>Update Location in UserInfo table</h2>
+    <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
-        <form method="POST" action="database.php"> <!--refresh page when submitted-->
-            <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-            UserID: <input type="text" name="userID"> <br /><br />
-            New Location: <input type="text" name="newLoc"> <br /><br />
+    <form method="POST" action="database.php"> <!--refresh page when submitted-->
+        <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
+        UserID: <input type="text" name="userID"> <br /><br />
+        New Location: <input type="text" name="newLoc"> <br /><br />
 
-            <input type="submit" value="Update" name="updateSubmit"></p>
-        </form>
+        <input type="submit" value="Update" name="updateSubmit"></p>
+    </form>
 
-        <hr />
-
-        
-        <h2>Delete a User</h2>
-        <form method="POST" action="database.php"> <!--refresh page when submitted-->
-            <input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
-            User ID : <input type="text" name="deleteUserID"> <br /><br />
-            <input type="submit" value="Delete" name="deleteSubmit"></p>
-        </form>
-        <hr />
+    <hr />
 
 
-        <h2>Count the Tuples in DemoTable</h2>
-        <form method="GET" action="oracle-test.php"> <!--refresh page when submitted-->
-            <input type="hidden" id="countTupleRequest" name="countTupleRequest">
-            <input type="submit" name="countTuples"></p>
-        </form>
+    <h2>Delete a User</h2>
+    <form method="POST" action="database.php"> <!--refresh page when submitted-->
+        <input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
+        User ID : <input type="text" name="deleteUserID"> <br /><br />
+        <input type="submit" value="Delete" name="deleteSubmit"></p>
+    </form>
+    <hr />
 
-        <?php
-		//this tells the system that it's no longer just parsing html; it's now parsing PHP
 
-        $success = True; //keep track of errors so it redirects the page only if there are no errors
-        $db_conn = NULL; // edit the login credentials in connectToDB()
-        $show_debug_alert_messages = False; // set to True if you want alerts to show you which methods are being triggered (see how it is used in debugAlertMessage())
+    <h2>Count the Tuples in DemoTable</h2>
+    <form method="GET" action="oracle-test.php"> <!--refresh page when submitted-->
+        <input type="hidden" id="countTupleRequest" name="countTupleRequest">
+        <input type="submit" name="countTuples"></p>
+    </form>
 
-        function debugAlertMessage($message) {
-            global $show_debug_alert_messages;
+    <?php
+    //this tells the system that it's no longer just parsing html; it's now parsing PHP
 
-            if ($show_debug_alert_messages) {
-                echo "<script type='text/javascript'>alert('" . $message . "');</script>";
-            }
+    $success = True; //keep track of errors so it redirects the page only if there are no errors
+    $db_conn = NULL; // edit the login credentials in connectToDB()
+    $show_debug_alert_messages = False; // set to True if you want alerts to show you which methods are being triggered (see how it is used in debugAlertMessage())
+
+    function debugAlertMessage($message)
+    {
+        global $show_debug_alert_messages;
+
+        if ($show_debug_alert_messages) {
+            echo "<script type='text/javascript'>alert('" . $message . "');</script>";
+        }
+    }
+
+    function executePlainSQL($cmdstr)
+    { //takes a plain (no bound variables) SQL command and executes it
+        //echo "<br>running ".$cmdstr."<br>";
+        global $db_conn, $success;
+
+        $statement = OCIParse($db_conn, $cmdstr);
+        //There are a set of comments at the end of the file that describe some of the OCI specific functions and how they work
+
+        if (!$statement) {
+            echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
+            $e = OCI_Error($db_conn); // For OCIParse errors pass the connection handle
+            echo htmlentities($e['message']);
+            $success = False;
         }
 
-        function executePlainSQL($cmdstr) { //takes a plain (no bound variables) SQL command and executes it
-            //echo "<br>running ".$cmdstr."<br>";
-            global $db_conn, $success;
+        $r = OCIExecute($statement, OCI_DEFAULT);
+        if (!$r) {
+            echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
+            $e = oci_error($statement); // For OCIExecute errors pass the statementhandle
+            echo htmlentities($e['message']);
+            $success = False;
+        }
 
-            $statement = OCIParse($db_conn, $cmdstr);
-            //There are a set of comments at the end of the file that describe some of the OCI specific functions and how they work
+        return $statement;
+    }
 
-            if (!$statement) {
-                echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
-                $e = OCI_Error($db_conn); // For OCIParse errors pass the connection handle
-                echo htmlentities($e['message']);
-                $success = False;
+    function executeBoundSQL($cmdstr, $list)
+    {
+        /* Sometimes the same statement will be executed several times with different values for the variables involved in the query.
+		In this case you don't need to create the statement several times. Bound variables cause a statement to only be
+		parsed once and you can reuse the statement. This is also very useful in protecting against SQL injection.
+		See the sample code below for how this function is used */
+
+        global $db_conn, $success;
+        $statement = OCIParse($db_conn, $cmdstr);
+
+        if (!$statement) {
+            echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
+            $e = OCI_Error($db_conn);
+            echo htmlentities($e['message']);
+            $success = False;
+        }
+
+        foreach ($list as $tuple) {
+            foreach ($tuple as $bind => $val) {
+                //echo $val;
+                //echo "<br>".$bind."<br>";
+                OCIBindByName($statement, $bind, $val);
+                unset($val); //make sure you do not remove this. Otherwise $val will remain in an array object wrapper which will not be recognized by Oracle as a proper datatype
             }
 
             $r = OCIExecute($statement, OCI_DEFAULT);
             if (!$r) {
                 echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
-                $e = oci_error($statement); // For OCIExecute errors pass the statementhandle
+                $e = OCI_Error($statement); // For OCIExecute errors, pass the statementhandle
                 echo htmlentities($e['message']);
+                echo "<br>";
                 $success = False;
-            }
-
-			return $statement;
-		}
-
-        function executeBoundSQL($cmdstr, $list) {
-            /* Sometimes the same statement will be executed several times with different values for the variables involved in the query.
-		In this case you don't need to create the statement several times. Bound variables cause a statement to only be
-		parsed once and you can reuse the statement. This is also very useful in protecting against SQL injection.
-		See the sample code below for how this function is used */
-
-			global $db_conn, $success;
-			$statement = OCIParse($db_conn, $cmdstr);
-
-            if (!$statement) {
-                echo "<br>Cannot parse the following command: " . $cmdstr . "<br>";
-                $e = OCI_Error($db_conn);
-                echo htmlentities($e['message']);
-                $success = False;
-            }
-
-            foreach ($list as $tuple) {
-                foreach ($tuple as $bind => $val) {
-                    //echo $val;
-                    //echo "<br>".$bind."<br>";
-                    OCIBindByName($statement, $bind, $val);
-                    unset ($val); //make sure you do not remove this. Otherwise $val will remain in an array object wrapper which will not be recognized by Oracle as a proper datatype
-				}
-
-                $r = OCIExecute($statement, OCI_DEFAULT);
-                if (!$r) {
-                    echo "<br>Cannot execute the following command: " . $cmdstr . "<br>";
-                    $e = OCI_Error($statement); // For OCIExecute errors, pass the statementhandle
-                    echo htmlentities($e['message']);
-                    echo "<br>";
-                    $success = False;
-                }
             }
         }
+    }
 
-        // function printResult($result) { //prints results from a select statement
-        //     echo "<br>Retrieved data from table demoTable:<br>";
-        //     echo "<table>";
-        //     echo "<tr><th>ID</th><th>Name</th></tr>";
+    // function printResult($result) { //prints results from a select statement
+    //     echo "<br>Retrieved data from table demoTable:<br>";
+    //     echo "<table>";
+    //     echo "<tr><th>ID</th><th>Name</th></tr>";
 
-        //     while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-        //         echo "<tr><td>" . $row["ID"] . "</td><td>" . $row["NAME"] . "</td></tr>"; //or just use "echo $row[0]"
-        //     }
+    //     while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+    //         echo "<tr><td>" . $row["ID"] . "</td><td>" . $row["NAME"] . "</td></tr>"; //or just use "echo $row[0]"
+    //     }
 
-        //     echo "</table>";
-        // }
+    //     echo "</table>";
+    // }
 
-        function printResult() { 
-            $userInfo = executePlainSQL("SELECT * FROM UserInfo");
+    function printResult()
+    {
+        $userInfo = executePlainSQL("SELECT * FROM UserInfo");
 
-            echo "<table>";
-            echo "
+        echo "<table>";
+        echo "
                 <tr>
                     <th>User ID</th>
                     <th>User Location</th>
@@ -187,136 +193,214 @@
             
             ";
 
-            while ($row = OCI_Fetch_Array($userInfo, OCI_BOTH)) {
-                echo "
+        while ($row = OCI_Fetch_Array($userInfo, OCI_BOTH)) {
+            echo "
                     <tr>
-                        <td>".$row[1]."</td>
-                        <td>".$row[2]."</td>
-                        <td>".$row[3]."</td>
-                        <td>".$row[0]."</td>
-                        <td>".$row[4]."</td>
+                        <td>" . $row[1] . "</td>
+                        <td>" . $row[2] . "</td>
+                        <td>" . $row[3] . "</td>
+                        <td>" . $row[0] . "</td>
+                        <td>" . $row[4] . "</td>
                     </tr>
                 ";
+        }
+        echo "</table>";
+
+        $UserProfile = executePlainSQL("SELECT * FROM UserProfile");
+
+        echo "<table>";
+        echo "
+                <tr>
+                    <th>Profile_URL</th>
+                    <th>User_name</th>
+                    <th>Phone Number</th>
+                    <th>Creation_Date</th>
+                    <th>Account_Level</th>
+                </tr>
+            
+            ";
+
+        while ($row = OCI_Fetch_Array($UserProfile, OCI_BOTH)) {
+            echo "
+                    <tr>
+                        <td>" . $row[0] . "</td>
+                        <td>" . $row[1] . "</td>
+                        <td>" . $row[2] . "</td>
+                        <td>" . $row[3] . "</td>
+                        <td>" . $row[4] . "</td>
+                    </tr>
+                ";
+        }
+        echo "</table>";
+    }
+
+    function connectToDB()
+    {
+        global $db_conn;
+
+        // Your username is ora_(CWL_ID) and the password is a(student number). For example,
+        // ora_platypus is the username and a12345678 is the password.
+        $db_conn = OCILogon("ora_lunawwy", "a97806434", "dbhost.students.cs.ubc.ca:1522/stu");
+
+        if ($db_conn) {
+            debugAlertMessage("Database is Connected");
+            return true;
+        } else {
+            debugAlertMessage("Cannot connect to Database");
+            $e = OCI_Error(); // For OCILogon errors pass no handle
+            echo htmlentities($e['message']);
+            return false;
+        }
+    }
+
+    function disconnectFromDB()
+    {
+        global $db_conn;
+
+        debugAlertMessage("Disconnect from Database");
+        OCILogoff($db_conn);
+    }
+
+    function handleInsertRequest()
+    {
+        global $db_conn;
+        //Getting the values from user and insert data into the table
+        $Playtime = 0.0; // set playtime defult to 0.0 with the new user
+        $defult = 'https://steamcommunity.com/id/';
+        $string = '/';
+        $idm = $_POST['UserID'] . $string;
+        $Profile_URL = $defult . $idm; // give the proile_url
+        $tuple = array(
+            ":Playtime" => $Playtime,
+            ":UserID" => $_POST['UserID'],
+            ":UserLocation" => $_POST['UserLocation'],
+            ":PhoneNum" => $_POST['PhoneNum'],
+            ":Profile_URL" => $Profile_URL
+
+        );
+
+        $alltuples = array(
+            $tuple
+        );
+
+        date_default_timezone_set('Canada/Vancouver');
+        $date = date('d-M-Y'); // give the system click time
+        $level = 1; // set defult to 1 in the account level for new user
+        $tuple1 = array(
+            ":Profile_URL" => $Profile_URL,
+            ":User_name" => $_POST['User_name'],
+            ":Creation_Date" => $date,
+            ":Account_Level" => $level
+        );
+
+        $alltuples1 = array(
+            $tuple1
+        );
+        // call the referenced table
+        executeBoundSQL("insert into UserProfile values (:Profile_URL, :User_name, :Creation_Date, :Account_Level)", $alltuples1);
+        executeBoundSQL("insert into UserInfo values (:Playtime, :UserID, :UserLocation, :PhoneNum, :Profile_URL)", $alltuples);
+        OCICommit($db_conn);
+    }
+
+    // update location by user ID
+    function handleUpdateRequest()
+    {
+        global $db_conn;
+
+        $user_id = $_POST['userID'];
+        $new_location = $_POST['newLoc'];
+
+        // you need the wrap the old name and new name values with single quotations
+        executePlainSQL("UPDATE UserInfo SET UserLocation='" . $new_location . "' WHERE UserID='" . $user_id . "'");
+        OCICommit($db_conn);
+        printResult();
+    }
+
+    function handleResetRequest()
+    {
+        global $db_conn;
+        // Drop old table
+        executePlainSQL("DROP TABLE demoTable");
+
+        // Create new table
+        echo "<br> creating new table <br>";
+        executePlainSQL("CREATE TABLE demoTable (id int PRIMARY KEY, name char(30))");
+        OCICommit($db_conn);
+    }
+
+    function handleCountRequest()
+    {
+        global $db_conn;
+
+        $result = executePlainSQL("SELECT Count(*) FROM demoTable");
+
+        if (($row = oci_fetch_row($result)) != false) {
+            echo "<br> The number of tuples in demoTable: " . $row[0] . "<br>";
+        }
+    }
+
+    function handleDeleteRequest()
+    {
+        global $db_conn;
+
+        $tuple = array(
+            ":UserID" => $_POST['deleteUserID']
+        );
+
+        $alltuples =  array(
+            $tuple
+        );
+
+        executeBoundSQL("DELETE FROM UserInfo u WHERE u.UserID = :UserID", $alltuples);
+        OCICommit($db_conn);
+        printResult();
+    }
+
+    function handleInitializeRequest()
+    {
+        printResult();
+    }
+
+    // HANDLE ALL POST ROUTES
+    // A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
+    function handlePOSTRequest()
+    {
+        if (connectToDB()) {
+            if (array_key_exists('resetTablesRequest', $_POST)) {
+                handleResetRequest();
+            } else if (array_key_exists('updateQueryRequest', $_POST)) {
+                handleUpdateRequest();
+            } else if (array_key_exists('insertQueryRequest', $_POST)) {
+                handleInsertRequest();
+            } else if (array_key_exists('deleteQueryRequest', $_POST)) {
+                handleDeleteRequest();
+            } else if (array_key_exists('initializeTablesRequest', $_POST)) {
+                handleInitializeRequest();
             }
-            echo "</table>";
+
+            disconnectFromDB();
         }
+    }
 
-        function connectToDB() {
-            global $db_conn;
-
-            // Your username is ora_(CWL_ID) and the password is a(student number). For example,
-			// ora_platypus is the username and a12345678 is the password.
-            $db_conn = OCILogon("ora_lunawwy", "a97806434", "dbhost.students.cs.ubc.ca:1522/stu");
-
-            if ($db_conn) {
-                debugAlertMessage("Database is Connected");
-                return true;
-            } else {
-                debugAlertMessage("Cannot connect to Database");
-                $e = OCI_Error(); // For OCILogon errors pass no handle
-                echo htmlentities($e['message']);
-                return false;
+    // HANDLE ALL GET ROUTES
+    // A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
+    function handleGETRequest()
+    {
+        if (connectToDB()) {
+            if (array_key_exists('countTuples', $_GET)) {
+                handleCountRequest();
             }
+
+            disconnectFromDB();
         }
+    }
 
-        function disconnectFromDB() {
-            global $db_conn;
+    if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['deleteSubmit']) || isset($_POST['initializeSubmit'])) {
+        handlePOSTRequest();
+    } else if (isset($_GET['countTupleRequest'])) {
+        handleGETRequest();
+    }
+    ?>
+</body>
 
-            debugAlertMessage("Disconnect from Database");
-            OCILogoff($db_conn);
-        }
-
-        // update location by user ID
-        function handleUpdateRequest() {
-            global $db_conn;
-
-            $user_id = $_POST['userID'];
-            $new_location = $_POST['newLoc'];
-
-            // you need the wrap the old name and new name values with single quotations
-            executePlainSQL("UPDATE UserInfo SET UserLocation='" . $new_location . "' WHERE UserID='" . $user_id . "'");
-            OCICommit($db_conn);
-            printResult();
-        }
-
-        function handleResetRequest() {
-            global $db_conn;
-            // Drop old table
-            executePlainSQL("DROP TABLE demoTable");
-
-            // Create new table
-            echo "<br> creating new table <br>";
-            executePlainSQL("CREATE TABLE demoTable (id int PRIMARY KEY, name char(30))");
-            OCICommit($db_conn);
-        }
-
-        function handleCountRequest() {
-            global $db_conn;
-
-            $result = executePlainSQL("SELECT Count(*) FROM demoTable");
-
-            if (($row = oci_fetch_row($result)) != false) {
-                echo "<br> The number of tuples in demoTable: " . $row[0] . "<br>";
-            }
-        }
-
-        function handleDeleteRequest() {
-            global $db_conn;
-
-            $tuple = array (
-                ":UserID" => $_POST['deleteUserID']
-            );
-
-            $alltuples =  array (
-                $tuple
-            );
-
-            executeBoundSQL("DELETE FROM UserInfo u WHERE u.UserID = :UserID", $alltuples);
-            OCICommit($db_conn);
-            printResult();
-        }
-
-        function handleInitializeRequest() {
-            printResult();
-        }
-
-        // HANDLE ALL POST ROUTES
-	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
-        function handlePOSTRequest() {
-            if (connectToDB()) {
-                if (array_key_exists('resetTablesRequest', $_POST)) {
-                    handleResetRequest();
-                } else if (array_key_exists('updateQueryRequest', $_POST)) {
-                    handleUpdateRequest();
-                } else if (array_key_exists('insertQueryRequest', $_POST)) {
-                    handleInsertRequest();
-                } else if (array_key_exists('deleteQueryRequest', $_POST)) {
-                    handleDeleteRequest();
-                } else if (array_key_exists('initializeTablesRequest', $_POST)) {
-                    handleInitializeRequest();
-                }
-
-                disconnectFromDB();
-            }
-        }
-
-        // HANDLE ALL GET ROUTES
-	// A better coding practice is to have one method that reroutes your requests accordingly. It will make it easier to add/remove functionality.
-        function handleGETRequest() {
-            if (connectToDB()) {
-                if (array_key_exists('countTuples', $_GET)) {
-                    handleCountRequest();
-                }
-
-                disconnectFromDB();
-            }
-        }
-
-		if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['deleteSubmit']) || isset($_POST['initializeSubmit'])) {
-            handlePOSTRequest();
-        } else if (isset($_GET['countTupleRequest'])) {
-            handleGETRequest();
-        }
-		?>
-	</body>
 </html>
