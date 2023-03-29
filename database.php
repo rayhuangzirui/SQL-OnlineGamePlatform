@@ -312,7 +312,14 @@
         executeBoundSQL("insert into UserProfile values (:Profile_URL, :User_name, :Creation_Date, :Account_Level)", $alltuples1);
         executeBoundSQL("insert into UserInfo values (:Playtime, :UserID, :UserLocation, :PhoneNum, :Profile_URL)", $alltuples);
         OCICommit($db_conn);
+        // echo $success;
+        // if ($success) {
+        //     $message = "New user is added";
+        // } else {
+        //     $message = "Action failed. Please try again";
+        // }
         printResult();
+        // echo "<script>alert('" . $message . "')</script>";
     }
 
     // update location by user ID
@@ -394,7 +401,20 @@
             $tuple
         );
 
+        $defult = 'https://steamcommunity.com/id/';
+        $string = '/';
+        $idm = $_POST['deleteUserID'] . $string;
+        $Profile_URL = $defult . $idm;
+
+        $tuple1 = array (
+            ":Profile_URL" => $Profile_URL
+        );
+        $alltuples1 =  array(
+            $tuple1
+        );
+        
         executeBoundSQL("DELETE FROM UserInfo u WHERE u.UserID = :UserID", $alltuples);
+        executeBoundSQL("DELETE FROM UserProfile up WHERE up.Profile_URL = :Profile_URL", $alltuples1);
         OCICommit($db_conn);
         printResult();
     }
