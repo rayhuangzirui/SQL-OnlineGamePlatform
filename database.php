@@ -393,28 +393,32 @@
     {
         global $db_conn;
 
-        $tuple = array(
-            ":UserID" => $_POST['deleteUserID']
-        );
+        // $tuple = array(
+        //     ":UserID" => $_POST['deleteUserID']
+        // );
 
+        // $alltuples =  array(
+        //     $tuple
+        // );
+
+        // $defult = 'https://steamcommunity.com/id/';
+        // $string = '/';
+        // $idm = $_POST['deleteUserID'] . $string;
+        // $Profile_URL = $defult . $idm;
+
+        $userID = $_POST['deleteUserID'];
+        $profileURL = 'https://steamcommunity.com/id/' . $userID . '/';
+
+        $tuple = array (
+            ":Profile_URL" => $profile_URL
+        );
         $alltuples =  array(
             $tuple
         );
-
-        $defult = 'https://steamcommunity.com/id/';
-        $string = '/';
-        $idm = $_POST['deleteUserID'] . $string;
-        $Profile_URL = $defult . $idm;
-
-        $tuple1 = array (
-            ":Profile_URL" => $Profile_URL
-        );
-        $alltuples1 =  array(
-            $tuple1
-        );
         
-        executeBoundSQL("DELETE FROM UserInfo u WHERE u.UserID = :UserID", $alltuples);
-        executeBoundSQL("DELETE FROM UserProfile up WHERE up.Profile_URL = :Profile_URL", $alltuples1);
+        // executeBoundSQL("DELETE FROM UserInfo u WHERE u.UserID = :UserID", $alltuples);
+        executeBoundSQL("DELETE FROM UserProfile up WHERE up.Profile_URL = :profile_URL", $alltuples);
+
         OCICommit($db_conn);
         printResult();
     }
