@@ -97,7 +97,7 @@
     <form method="GET" action="database.php"> <!--refresh page when submitted-->
         <input type="hidden" id="selectionQueryRequest" name="selectionQueryRequest">
         Price: <input type="number" step="0.001" name="Price"> <br /><br />
-        <input type="submit" value = "Select" name="selectionSubmit"></p>
+        <input type="submit" value="Select" name="selectionSubmit"></p>
     </form>
     <hr />
 
@@ -105,7 +105,19 @@
     <p>Count the number of games each user have </p>
     <form method="GET" action="database.php"> <!--refresh page when submitted-->
         <input type="hidden" id="aggregationGroupByQueryRequest" name="aggregationGroupByQueryRequest">
-        <input type="submit" value = "Show Result" name="aggGroupBySubmit"></p>
+        <input type="submit" value="Show Result" name="aggGroupBySubmit"></p>
+    </form>
+    <hr />
+
+    <h2>Wanna know how many people are playing the specific genre of game </h2>
+    <p>Aggregation with Group By and Having Query</p>
+    <form method="GET" action="database.php"> <!--refresh page when submitted-->
+        <input type="hidden" id="HavingQueryRequest" name="HavingQueryRequest">
+        Genre : <select name="Genren">
+            <option value='RPG'>RPG</option>
+            <option value='Action'>Action</option>
+        </select> <br /><br />
+        <input type="submit" value="Find" name="HavingSubmit"></p>
     </form>
     <hr />
 
@@ -194,17 +206,38 @@
         }
     }
 
-    // function printResult($result) { //prints results from a select statement
-    //     echo "<br>Retrieved data from table demoTable:<br>";
-    //     echo "<table>";
-    //     echo "<tr><th>ID</th><th>Name</th></tr>";
+    function handleHavingRequest()
+    {
+        global $db_conn;
 
-    //     while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-    //         echo "<tr><td>" . $row["ID"] . "</td><td>" . $row["NAME"] . "</td></tr>"; //or just use "echo $row[0]"
-    //     }
+        $result = executePlainSQL(
+            "SELECT DISTINCT COUNT(o.UserID), gn.Name
+             FROM Own o,BelongsTo bt, GenreDescription gd, GenreName gn
+             WHERE bt.GID = o.GID AND bt.GeID = gd.GeID AND gd.Description = gn.Description
+             GROUP BY gn.Name
+             Having gn.Name = '{$_GET['Genren']}'
 
-    //     echo "</table>";
-    // }
+            "
+        );
+        OCICommit($db_conn);
+        echo "<table border = 1 cellspacing = 0 width = 400 height = 300>";
+        echo "
+            <caption> Game Found </caption>
+            <tr>
+                <th>Game Name</th>
+                <th>Number of Player</th>
+            </tr>
+        ";
+        while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+            echo "
+                    <tr>
+                        <td>" . $row[1] . "</td>
+                        <td>" . $row[0] . "</td>
+                    </tr>
+                ";
+        }
+        echo "</table>";
+    }
 
     function handleSelectionRequest()
     {
@@ -469,7 +502,8 @@
         echo "<script>alert('" . $message . "')</script>";
     }
 
-    function handleAggGroupByRequest() {
+    function handleAggGroupByRequest()
+    {
         global $db_conn;
 
         $result = executePlainSQL("
@@ -536,6 +570,8 @@
                 handleSelectionRequest();
             } else if (array_key_exists('aggGroupBySubmit', $_GET)) {
                 handleAggGroupByRequest();
+            } else if (array_key_exists('HavingSubmit', $_GET)) {
+                handleHavingRequest();
             }
 
             disconnectFromDB();
@@ -544,7 +580,7 @@
 
     if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['deleteSubmit']) || isset($_POST['initializeSubmit'])) {
         handlePOSTRequest();
-    } else if (isset($_GET['countTupleRequest']) || isset($_GET['joinQueryRequest']) || isset($_GET['selectionQueryRequest']) || isset($_GET['aggregationGroupByQueryRequest'])) {
+    } else if (isset($_GET['countTupleRequest']) || isset($_GET['joinQueryRequest']) || isset($_GET['selectionQueryRequest']) || isset($_GET['aggregationGroupByQueryRequest']) || isset($_GET['HavingQueryRequest'])) {
         handleGETRequest();
     }
     ?>
