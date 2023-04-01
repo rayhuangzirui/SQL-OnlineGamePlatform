@@ -84,10 +84,21 @@
     <form method="GET" action="database.php"> <!--refresh page when submitted-->
         <input type="hidden" id="joinQueryRequest" name="joinQueryRequest">
         Genre : <select name="joinGenre">
-                    <option value='RPG'>RPG</option>  
-                    <option value='Action'>Action</option>  
-                </select> <br /><br />
+            <option value='RPG'>RPG</option>
+            <option value='Action'>Action</option>
+        </select> <br /><br />
         <input type="submit" value="Find" name="joinSubmit"></p>
+    </form>
+    <hr />
+
+    <hr />
+
+    <h2>Selection Query</h2>
+    <p>Find all the game below specific price </p>
+    <form method="GET" action="database.php"> <!--refresh page when submitted-->
+        <input type="hidden" id="selectionQueryRequest" name="selectionQueryRequest">
+        Price: <input type="number" step="0.001" name="Price"> <br /><br />
+        <input type="submit" name="selectionSubmit"></p>
     </form>
     <hr />
 
@@ -188,6 +199,38 @@
     //     echo "</table>";
     // }
 
+    function handleSelectionRequest()
+    {
+        global $db_conn;
+
+        $result = executePlainSQL("
+            SELECT Name, Price
+            FROM GamePrice
+            WHERE Price < '{$_GET['Price']}'
+        ");
+        OCICommit($db_conn);
+        echo "<br>Retrieved data from GamePrice table:<br>";
+        echo "<table>";
+        echo "
+            <tr>
+                <th>Name</th>
+                <th>Release_Date</th>
+                <th>Price</th>
+            </tr>
+        ";
+
+        while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+            echo "<tr>
+                <td>" . $row[0] . "</td> 
+                <td>" . $row[1] . "</td> 
+                <td>" . $row[2] . "</td> 
+                </tr>";
+        }
+        echo "</table>";
+
+        OCICommit($db_conn);
+    }
+
     function printResult()
     {
         $userInfo = executePlainSQL("SELECT * FROM UserInfo");
@@ -218,7 +261,7 @@
         }
         echo "</table>";
 
-        
+
         $UserProfile = executePlainSQL("SELECT * FROM UserProfile");
 
         echo "<br><br> <table border = 1 cellspacing = 0 width = 400 height = 300>";
@@ -349,14 +392,16 @@
     }
 
 
-    function handleJoinRequest() {
+    function handleJoinRequest()
+    {
         global $db_conn;
 
         $result = executePlainSQL(
             "   SELECT DISTINCT gu.Name, gu.URL
                 FROM GameInfo gi,BelongsTo bt, GenreDescription gd, GenreName gn, GameURL gu
                 WHERE bt.GID = gi.GID AND bt.GeID = gd.GeID AND gd.Description = gn.Description AND gu.URL = gi.URL AND gn.Name = '{$_GET['joinGenre']}'
-            ");
+            "
+        );
         OCICommit($db_conn);
         echo "<table border = 1 cellspacing = 0 width = 400 height = 300>";
         echo "
@@ -409,13 +454,13 @@
         $userID = $_POST['deleteUserID'];
         $profileURL = 'https://steamcommunity.com/id/' . $userID . '/';
 
-        $tuple = array (
+        $tuple = array(
             ":Profile_URL" => $profile_URL
         );
         $alltuples =  array(
             $tuple
         );
-        
+
         // executeBoundSQL("DELETE FROM UserInfo u WHERE u.UserID = :UserID", $alltuples);
         executeBoundSQL("DELETE FROM UserProfile up WHERE up.Profile_URL = :profile_URL", $alltuples);
 
@@ -458,6 +503,8 @@
                 handleCountRequest();
             } else if (array_key_exists('joinSubmit', $_GET)) {
                 handleJoinRequest();
+            } else if (array_key_exists('selectionSubmit', $_GET)) {
+                handleSelectionRequest();
             }
 
             disconnectFromDB();
