@@ -75,7 +75,7 @@
     <h2>Delete a User</h2>
     <form method="POST" action="database.php"> <!--refresh page when submitted-->
         <input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
-        User ID : <input type="text" name="deleteUserID"> <br /><br />
+        User ID : <input type="number" name="deleteUserID"> <br /><br />
         <input type="submit" value="Delete" name="deleteSubmit"></p>
     </form>
     <hr />
@@ -438,31 +438,12 @@
     {
         global $db_conn;
 
-        // $tuple = array(
-        //     ":UserID" => $_POST['deleteUserID']
-        // );
-
-        // $alltuples =  array(
-        //     $tuple
-        // );
-
-        // $defult = 'https://steamcommunity.com/id/';
-        // $string = '/';
-        // $idm = $_POST['deleteUserID'] . $string;
-        // $Profile_URL = $defult . $idm;
-
         $userID = $_POST['deleteUserID'];
         $profileURL = 'https://steamcommunity.com/id/' . $userID . '/';
+        // if ($profileURL == 'https://steamcommunity.com/id/5/')
+        //     echo 'this';
 
-        $tuple = array(
-            ":Profile_URL" => $profile_URL
-        );
-        $alltuples =  array(
-            $tuple
-        );
-
-        // executeBoundSQL("DELETE FROM UserInfo u WHERE u.UserID = :UserID", $alltuples);
-        executeBoundSQL("DELETE FROM UserProfile up WHERE up.Profile_URL = :profile_URL", $alltuples);
+        executePlainSQL("DELETE FROM UserProfile up WHERE up.Profile_URL = '" . $profileURL . "'");
 
         OCICommit($db_conn);
         printResult();
