@@ -80,7 +80,8 @@
     </form>
     <hr />
 
-    <h2>Wanna search for a specific genre?</h2>
+    <h2>Join Query</h2>
+    <p>Wanna search for a specific genre?</p>
     <form method="GET" action="database.php"> <!--refresh page when submitted-->
         <input type="hidden" id="joinQueryRequest" name="joinQueryRequest">
         Genre : <select name="joinGenre">
@@ -97,6 +98,14 @@
         <input type="hidden" id="selectionQueryRequest" name="selectionQueryRequest">
         Price: <input type="number" step="0.001" name="Price"> <br /><br />
         <input type="submit" value = "Select" name="selectionSubmit"></p>
+    </form>
+    <hr />
+
+    <h2>Aggregation with Group By Query</h2>
+    <p>Count the number of games each user have </p>
+    <form method="GET" action="database.php"> <!--refresh page when submitted-->
+        <input type="hidden" id="aggregationGroupByQueryRequest" name="aggregationGroupByQueryRequest">
+        <input type="submit" value = "Show Result" name="aggGroupBySubmit"></p>
     </form>
     <hr />
 
@@ -460,6 +469,34 @@
         echo "<script>alert('" . $message . "')</script>";
     }
 
+    function handleAggGroupByRequest() {
+        global $db_conn;
+
+        $result = executePlainSQL("
+            SELECT UserID, COUNT(*)
+            FROM Own
+            GROUP BY UserID
+        ");
+        OCICommit($db_conn);
+        echo "<table>";
+        echo "
+            <tr>
+                <th>User ID</th>
+                <th>Number of Games</th>
+            </tr>
+        ";
+
+        while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+            echo "
+                <tr>
+                    <td>" . $row[0] . "</td> 
+                    <td>" . $row[1] . "</td> 
+                <tr/>
+            ";
+        }
+        echo "</table>";
+    }
+
     function handleInitializeRequest()
     {
         printResult();
@@ -497,6 +534,8 @@
                 handleJoinRequest();
             } else if (array_key_exists('selectionSubmit', $_GET)) {
                 handleSelectionRequest();
+            } else if (array_key_exists('aggGroupBySubmit', $_GET)) {
+                handleAggGroupByRequest();
             }
 
             disconnectFromDB();
@@ -505,7 +544,7 @@
 
     if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['deleteSubmit']) || isset($_POST['initializeSubmit'])) {
         handlePOSTRequest();
-    } else if (isset($_GET['countTupleRequest']) || isset($_GET['joinQueryRequest']) || isset($_GET['selectionQueryRequest'])) {
+    } else if (isset($_GET['countTupleRequest']) || isset($_GET['joinQueryRequest']) || isset($_GET['selectionQueryRequest']) || isset($_GET['aggregationGroupByQueryRequest'])) {
         handleGETRequest();
     }
     ?>
