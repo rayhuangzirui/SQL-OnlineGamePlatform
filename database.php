@@ -114,13 +114,7 @@
         </select>
         <br><br>
         <label>Select attributes:</label><br>
-        <!-- <label><input type="checkbox" name="attributes[]" value="UserID">UserID</label><br>
-        <label><input type="checkbox" name="attributes[]" value="FUID">FUID</label><br>
-        <label><input type="checkbox" name="attributes[]" value="Description">Description</label><br>
-        <label><input type="checkbox" name="attributes[]" value="Date_reported">Date_reported</label><br>
-        <label><input type="checkbox" name="attributes[]" value="Status">Status</label><br>
-        <label><input type="checkbox" name="attributes[]" value="TID">TID</label><br>
-         -->
+
          <?php
         // retrieve the selected table from the GET request
         $tableName = $_GET['projectTable'];
@@ -517,7 +511,12 @@
 
         $selectedColumns = implode(", ", $selectedAttributes);
         $result = executePlainSQL("SELECT $selectedColumns FROM $tableName");
+        if (!$result) {
+            echo "Failed to execute query";
+            return;
+        }
         OCICommit($db_conn);
+
         
         echo "<table border='1' cellspacing='0' width='400' height='300'>";
         echo "<caption>Projection Results</caption>";
@@ -530,7 +529,7 @@
             echo "<tr>";
             foreach ($selectedAttributes as $attr) {
                 echo "<td>" . $row[$attr] . "</td>";
-                echo  $attr;
+
             }
             echo "</tr>";
         }
