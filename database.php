@@ -101,6 +101,50 @@
     </form>
     <hr />
 
+    <h2>Choose Attributes to View:</h2>
+    <form method="GET" action="database.php"> <!--refresh page when submitted-->
+        <input type="hidden" id="projectQueryRequest" name="projectQueryRequest">
+        <label>Select table:</label>
+        <select name="projectTable">
+            <option value='UserProfile'>User Profile</option>
+            <option value='UserInfo'>User Info</option>
+            <option value='FriendOf'>Friends</option>
+            <option value='SupportTicketStatus'>SupportTicketStatus</option>
+            <option value='SupportTicketRequest'>SupportTicketRequest</option>
+        </select>
+        <br><br>
+        <label>Select attributes:</label><br>
+        <!-- <label><input type="checkbox" name="attributes[]" value="UserID">UserID</label><br>
+        <label><input type="checkbox" name="attributes[]" value="FUID">FUID</label><br>
+        <label><input type="checkbox" name="attributes[]" value="Description">Description</label><br>
+        <label><input type="checkbox" name="attributes[]" value="Date_reported">Date_reported</label><br>
+        <label><input type="checkbox" name="attributes[]" value="Status">Status</label><br>
+        <label><input type="checkbox" name="attributes[]" value="TID">TID</label><br>
+         -->
+         <?php
+        // retrieve the selected table from the GET request
+        $tableName = $_GET['projectTable'];
+
+        // create an array of attributes for each table
+        $attributes = array(
+            'UserProfile' => array('Profile_URL', 'User_name', 'Creation_Date', 'Account_Level'),
+            'UserInfo' => array('Playtime', 'UserID', 'UserLocation', 'PhoneNum', 'Profile_URL'),
+            'FriendOf' => array('UserID', 'FUID'),
+            'SupportTicketStatus' => array('Description', 'Date_reported', 'UserID', 'Status'),
+            'SupportTicketRequest' => array('TID', 'Description', 'Date_reported', 'UserID')
+        );
+
+        // generate checkboxes for the attributes of the selected table
+        foreach ($attributes[$tableName] as $attribute) {
+            echo "<label><input type='checkbox' name='projectAttributes[]' value='$attribute'> $attribute </label><br>";
+        }
+        ?>
+        <br>
+    <input type="submit" value="Submit" name="projectSubmit"></p>
+    </form>
+               
+    <hr />
+
     <h2>Aggregation with Group By Query</h2>
     <p>Count the number of games each user have </p>
     <form method="GET" action="database.php"> <!--refresh page when submitted-->
@@ -468,6 +512,31 @@
         echo "</table>";
     }
 
+    function handleProjectRequest($tableName, $selectedAttributes) {
+        global $db_conn;
+
+        $selectedColumns = implode(", ", $selectedAttributes);
+        $result = executePlainSQL("SELECT $selectedColumns FROM $tableName");
+        OCICommit($db_conn);
+        
+        echo "<table border='1' cellspacing='0' width='400' height='300'>";
+        echo "<caption>Projection Results</caption>";
+        echo "<tr>";
+        foreach ($selectedAttributes as $attr) {
+            echo "<th>$attr</th>";
+        }
+        echo "</tr>";
+        while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+            echo "<tr>";
+            foreach ($selectedAttributes as $attr) {
+                echo "<td>" . $row[$attr] . "</td>";
+                echo  $attr;
+            }
+            echo "</tr>";
+        }
+        echo "</table>";
+    }
+
 
     function handleCountRequest()
     {
@@ -572,6 +641,10 @@
                 handleAggGroupByRequest();
             } else if (array_key_exists('HavingSubmit', $_GET)) {
                 handleHavingRequest();
+            } else if (array_key_exists('projectSubmit', $_GET)) {
+                $tableName = $_GET['projectTable'];
+                $selectedAttributes = $_GET['projectAttributes'];
+                handleProjectRequest($tableName, $selectedAttributes);
             }
 
             disconnectFromDB();
@@ -580,7 +653,7 @@
 
     if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['deleteSubmit']) || isset($_POST['initializeSubmit'])) {
         handlePOSTRequest();
-    } else if (isset($_GET['countTupleRequest']) || isset($_GET['joinQueryRequest']) || isset($_GET['selectionQueryRequest']) || isset($_GET['aggregationGroupByQueryRequest']) || isset($_GET['HavingQueryRequest'])) {
+    } else if (isset($_GET['countTupleRequest']) || isset($_GET['joinQueryRequest']) || isset($_GET['selectionQueryRequest']) || isset($_GET['aggregationGroupByQueryRequest']) || isset($_GET['HavingQueryRequest']) || isset($_GET['projectQueryRequest'])) {
         handleGETRequest();
     }
     ?>
