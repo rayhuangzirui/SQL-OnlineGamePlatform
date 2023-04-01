@@ -91,14 +91,12 @@
     </form>
     <hr />
 
-    <hr />
-
     <h2>Selection Query</h2>
     <p>Find all the game below specific price </p>
     <form method="GET" action="database.php"> <!--refresh page when submitted-->
         <input type="hidden" id="selectionQueryRequest" name="selectionQueryRequest">
         Price: <input type="number" step="0.001" name="Price"> <br /><br />
-        <input type="submit" name="selectionSubmit"></p>
+        <input type="submit" value = "Select" name="selectionSubmit"></p>
     </form>
     <hr />
 
@@ -513,7 +511,7 @@
 
     if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['deleteSubmit']) || isset($_POST['initializeSubmit'])) {
         handlePOSTRequest();
-    } else if (isset($_GET['countTupleRequest']) || isset($_GET['joinQueryRequest'])) {
+    } else if (isset($_GET['countTupleRequest']) || isset($_GET['joinQueryRequest']) || isset($_GET['selectionQueryRequest'])) {
         handleGETRequest();
     }
     ?>
