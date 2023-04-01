@@ -316,7 +316,7 @@
 
     function handleInsertRequest()
     {
-        global $db_conn;
+        global $db_conn, $success;
         //Getting the values from user and insert data into the table
         $Playtime = 0.0; // set playtime defult to 0.0 with the new user
         $defult = 'https://steamcommunity.com/id/';
@@ -353,20 +353,20 @@
         executeBoundSQL("insert into UserProfile values (:Profile_URL, :User_name, :Creation_Date, :Account_Level)", $alltuples1);
         executeBoundSQL("insert into UserInfo values (:Playtime, :UserID, :UserLocation, :PhoneNum, :Profile_URL)", $alltuples);
         OCICommit($db_conn);
-        // echo $success;
-        // if ($success) {
-        //     $message = "New user is added";
-        // } else {
-        //     $message = "Action failed. Please try again";
-        // }
+
+        if ($success) {
+            $message = 'New user ' . $_POST['User_name'] . ' is added';
+        } else {
+            $message = "Action failed: User exisit. Please try again with a different ID";
+        }
         printResult();
-        // echo "<script>alert('" . $message . "')</script>";
+        echo "<script>alert('" . $message . "')</script>";
     }
 
     // update location by user ID
     function handleUpdateRequest()
     {
-        global $db_conn;
+        global $db_conn, $success;
 
         $user_id = $_POST['userID'];
         $new_location = $_POST['newLoc'];
@@ -374,7 +374,13 @@
         // you need the wrap the old name and new name values with single quotations
         executePlainSQL("UPDATE UserInfo SET UserLocation='" . $new_location . "' WHERE UserID='" . $user_id . "'");
         OCICommit($db_conn);
+        if ($success) {
+            $message = "User location is updated";
+        } else {
+            $message = "Action failed. Please try again";
+        }
         printResult();
+        echo "<script>alert('" . $message . "')</script>";
     }
 
     function handleResetRequest()
@@ -434,7 +440,7 @@
 
     function handleDeleteRequest()
     {
-        global $db_conn;
+        global $db_conn, $success;
 
         $userID = $_POST['deleteUserID'];
         $profileURL = 'https://steamcommunity.com/id/' . $userID . '/';
@@ -444,7 +450,14 @@
         executePlainSQL("DELETE FROM UserProfile up WHERE up.Profile_URL = '" . $profileURL . "'");
 
         OCICommit($db_conn);
+
+        if ($success) {
+            $message = "User is deleted";
+        } else {
+            $message = "Action failed. Please try again";
+        }
         printResult();
+        echo "<script>alert('" . $message . "')</script>";
     }
 
     function handleInitializeRequest()
