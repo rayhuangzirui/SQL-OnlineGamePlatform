@@ -23,19 +23,8 @@
 </head>
 
 <body>
-    <!-- <h2>Reset</h2> -->
-    <!-- <p>If you wish to reset the table press on the reset button. If this is the first time you're running this page, you MUST use reset</p> -->
-
-    <!-- <form method="POST" action="database.php"> -->
-    <!-- if you want another page to load after the button is clicked, you have to specify that page in the action parameter -->
-    <!-- <input type="hidden" id="resetTablesRequest" name="resetTablesRequest"> -->
-    <!-- <p><input type="submit" value="Reset" name="reset"></p> -->
-    <!-- </form> -->
-
-    <!-- <hr /> -->
-
-    <h2>Initialize</h2>
-    <p>If this is the first time you're running this page, please click the button below to see our default data!</p>
+    <h2>Show User Info</h2>
+    <p>If this is the first time you're running this page, please click the button below to see our default user data.</p>
 
     <form method="POST" action="database.php">
         <input type="hidden" id="initializeTablesRequest" name="initializeTablesRequest">
@@ -44,7 +33,8 @@
 
     <hr />
 
-    <h2>Insert Values into DemoTable</h2>
+    <h2>INSERT Query</h2>
+    <h3> Insert a new user</h3>
     <form method="POST" action="database.php"> <!--refresh page when submitted-->
         <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
         ID: <input type="number" name="UserID"> <br /><br /> <!--number input-->
@@ -57,8 +47,18 @@
 
     <hr />
 
+    <h2>DELETE Query</h2>
+    <h3>Delete a User</h3>
+    <form method="POST" action="database.php"> <!--refresh page when submitted-->
+        <input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
+        User ID : <input type="number" name="deleteUserID"> <br /><br />
+        <input type="submit" value="Delete" name="deleteSubmit"></p>
+    </form>
+    <hr />
+
     <!--Changed interpretation showing on the webpage-->
-    <h2>Update Location in UserInfo table</h2>
+    <h2>UPDATE Query</h2>
+    <h3>Update user location</h3>
     <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
     <form method="POST" action="database.php"> <!--refresh page when submitted-->
@@ -71,29 +71,8 @@
 
     <hr />
 
-
-    <h2>Delete a User</h2>
-    <form method="POST" action="database.php"> <!--refresh page when submitted-->
-        <input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
-        User ID : <input type="number" name="deleteUserID"> <br /><br />
-        <input type="submit" value="Delete" name="deleteSubmit"></p>
-    </form>
-    <hr />
-
-    <h2>Join Query</h2>
-    <p>Wanna search for a specific genre?</p>
-    <form method="GET" action="database.php"> <!--refresh page when submitted-->
-        <input type="hidden" id="joinQueryRequest" name="joinQueryRequest">
-        Genre : <select name="joinGenre">
-            <option value='RPG'>RPG</option>
-            <option value='Action'>Action</option>
-        </select> <br /><br />
-        <input type="submit" value="Find" name="joinSubmit"></p>
-    </form>
-    <hr />
-
-    <h2>Selection Query</h2>
-    <p>Find all the game below specific price </p>
+    <h2>SELECTION Query</h2>
+    <h3>Find all the games below a specific price </h3>
     <form method="GET" action="database.php"> <!--refresh page when submitted-->
         <input type="hidden" id="selectionQueryRequest" name="selectionQueryRequest">
         Price: <input type="number" step="0.001" name="Price"> <br /><br />
@@ -101,7 +80,8 @@
     </form>
     <hr />
 
-    <h2>Choose Attributes to View:</h2>
+    <h2>PROJECTION Query</h3>
+    <h3>Choose Attributes to View:</h3>
     <form method="GET" action="database.php"> <!--refresh page when submitted-->
         <input type="hidden" id="projectQueryRequest" name="projectQueryRequest">
         <label>Select table:</label>
@@ -112,9 +92,8 @@
             <option value='SupportTicketStatus'>SupportTicketStatus</option>
             <option value='SupportTicketRequest'>SupportTicketRequest</option>
         </select>
-        <br><br>
-        <label>Select attributes:</label><br>
-
+    <br><br>
+    <label>Select attributes:</label><br>
          <?php
         // retrieve the selected table from the GET request
         $tableName = $_GET['projectTable'];
@@ -139,31 +118,50 @@
                
     <hr />
 
-    <h2>Aggregation with Group By Query</h2>
-    <p>Count the number of games each user have </p>
+    <h2>JOIN Query</h2>
+    <h3>Search which games are under a specific genre</h3>
     <form method="GET" action="database.php"> <!--refresh page when submitted-->
-        <input type="hidden" id="aggregationGroupByQueryRequest" name="aggregationGroupByQueryRequest">
-        <input type="submit" value="Show Result" name="aggGroupBySubmit"></p>
+        <input type="hidden" id="joinQueryRequest" name="joinQueryRequest">
+        Genre : <select name="joinGenre">
+            <option value='RPG'>RPG</option>
+            <option value='Action'>Action</option>
+            <option value='Moba'>Moba</option>
+            <option value='Racing'>Racing</option>
+            <option value='Sandbox'>Sandbox</option>
+        </select> <br /><br />
+        <input type="submit" value="Find" name="joinSubmit"></p>
     </form>
     <hr />
 
-    <h2>Wanna know how many people are playing the specific genre of game </h2>
-    <p>Aggregation with Group By and Having Query</p>
+
+    <h2>Aggregation with GROUP BY Query</h2>
+    <h3>Count the number of games each user have </h3>
+    <form method="GET" action="database.php"> <!--refresh page when submitted-->
+        <input type="hidden" id="aggregationGroupByQueryRequest" name="aggregationGroupByQueryRequest">
+        <input type="submit" value="Find" name="aggGroupBySubmit"></p>
+    </form>
+    <hr />
+
+    <h2>Aggregation with HAVING Query</h2>
+    <h3>Find how many people are playing the specific genre of game </h3>
     <form method="GET" action="database.php"> <!--refresh page when submitted-->
         <input type="hidden" id="HavingQueryRequest" name="HavingQueryRequest">
         Genre : <select name="Genren">
             <option value='RPG'>RPG</option>
             <option value='Action'>Action</option>
+            <option value='Moba'>Moba</option>
+            <option value='Racing'>Racing</option>
+            <option value='Sandbox'>Sandbox</option>
         </select> <br /><br />
         <input type="submit" value="Find" name="HavingSubmit"></p>
     </form>
     <hr />
 
-
-    <h2>Count the Tuples in DemoTable</h2>
-    <form method="GET" action="oracle-test.php"> <!--refresh page when submitted-->
-        <input type="hidden" id="countTupleRequest" name="countTupleRequest">
-        <input type="submit" name="countTuples"></p>
+    <h2>Nested Aggregation with GROUP BY Query</h2>
+    <h3>Find average prices for the genres that have more than 1 games </h3>
+    <form method="GET" action="database.php"> <!--refresh page when submitted-->
+        <input type="hidden" id="nestedQueryRequest" name="nestedQueryRequest">
+        <input type="submit" value="Find" name="nestedSubmit"></p>
     </form>
 
     <?php
@@ -260,9 +258,9 @@
         OCICommit($db_conn);
         echo "<table border = 1 cellspacing = 0 width = 400 height = 300>";
         echo "
-            <caption> Game Found </caption>
+            <caption> Genre Found </caption>
             <tr>
-                <th>Game Name</th>
+                <th>Genre Name</th>
                 <th>Number of Player</th>
             </tr>
         ";
@@ -288,11 +286,10 @@
         ");
         OCICommit($db_conn);
         echo "<br>Retrieved data from GamePrice table:<br>";
-        echo "<table>";
+        echo "<table border = 1 cellspacing = 0 width = 400 height = 300>";
         echo "
             <tr>
                 <th>Name</th>
-                <th>Release_Date</th>
                 <th>Price</th>
             </tr>
         ";
@@ -301,7 +298,6 @@
             echo "<tr>
                 <td>" . $row[0] . "</td> 
                 <td>" . $row[1] . "</td> 
-                <td>" . $row[2] . "</td> 
                 </tr>";
         }
         echo "</table>";
@@ -536,18 +532,6 @@
         echo "</table>";
     }
 
-
-    function handleCountRequest()
-    {
-        global $db_conn;
-
-        $result = executePlainSQL("SELECT Count(*) FROM demoTable");
-
-        if (($row = oci_fetch_row($result)) != false) {
-            echo "<br> The number of tuples in demoTable: " . $row[0] . "<br>";
-        }
-    }
-
     function handleDeleteRequest()
     {
         global $db_conn, $success;
@@ -580,7 +564,7 @@
             GROUP BY UserID
         ");
         OCICommit($db_conn);
-        echo "<table>";
+        echo "<table border = 1 cellspacing = 0 width = 400 height = 300>";
         echo "
             <tr>
                 <th>User ID</th>
@@ -597,6 +581,42 @@
             ";
         }
         echo "</table>";
+    }
+
+    function handleNestedRequest() {
+        global $db_conn;
+
+        $result = executePlainSQL("
+            SELECT gd.GeID, gn.Name, AVG(gp.price)
+            FROM GameInfo gi,BelongsTo bt, GenreDescription gd, GameURL gu, GamePrice gp, GenreName gn
+            WHERE bt.GID = gi.GID AND bt.GeID = gd.GeID AND gi.URL = gu.URL AND gu.Name = gp.Name AND gu.Release_Date = gp.Release_Date AND gd.description = gn.description
+            GROUP BY gd.GeID, gn.Name
+            Having 1 < (SELECT COUNT(*)
+                        FROM BelongsTo bt1
+                        WHERE bt1.GeID = gd.GeID
+                        GROUP BY bt1.GeID)
+        ");
+        OCICommit($db_conn);
+        echo "<table border='1' cellspacing='0' width='400' height='300'>";
+        echo "
+            <tr>
+                <th>Genre ID</th>
+                <th>Genre Name</th>
+                <th>Average Price</th>
+            </tr>
+        ";
+
+        while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
+            echo "
+                <tr>
+                    <td>" . $row[0] . "</td> 
+                    <td>" . $row[1] . "</td> 
+                    <td>" . $row[2] . "</td> 
+                <tr/>
+            ";
+        }
+        echo "</table>";
+        
     }
 
     function handleInitializeRequest()
@@ -644,6 +664,8 @@
                 $tableName = $_GET['projectTable'];
                 $selectedAttributes = $_GET['projectAttributes'];
                 handleProjectRequest($tableName, $selectedAttributes);
+            } else if (array_key_exists('nestedSubmit', $_GET)) {
+                handleNestedRequest();
             }
 
             disconnectFromDB();
@@ -652,7 +674,7 @@
 
     if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['deleteSubmit']) || isset($_POST['initializeSubmit'])) {
         handlePOSTRequest();
-    } else if (isset($_GET['countTupleRequest']) || isset($_GET['joinQueryRequest']) || isset($_GET['selectionQueryRequest']) || isset($_GET['aggregationGroupByQueryRequest']) || isset($_GET['HavingQueryRequest']) || isset($_GET['projectQueryRequest'])) {
+    } else if (isset($_GET['countTupleRequest']) || isset($_GET['joinQueryRequest']) || isset($_GET['selectionQueryRequest']) || isset($_GET['aggregationGroupByQueryRequest']) || isset($_GET['HavingQueryRequest']) || isset($_GET['projectQueryRequest']) || isset($_GET['nestedQueryRequest'])) {
         handleGETRequest();
     }
     ?>
