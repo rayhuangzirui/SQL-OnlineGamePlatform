@@ -449,11 +449,11 @@ VALUES (1, 'Rockstar Game Publisher Sale', 2);
 
 INSERT 
 INTO SalesEventContent
-VALUES (2, 'Summer sale 2022', NULL);
+VALUES (2, 'Summer sale 2022', 2);
 
 INSERT 
 INTO SalesEventContent
-VALUES (3, 'Winter sale 2022', NULL);
+VALUES (3, 'Winter sale 2022', 2);
 
 INSERT 
 INTO SalesEventContent
@@ -461,7 +461,7 @@ VALUES (4, 'Sports Fest', 4);
 
 INSERT 
 INTO SalesEventContent
-VALUES (5, 'Scream Fest', NULL);
+VALUES (5, 'Scream Fest', 2);
 
 INSERT INTO DiscountAssociate 
 VALUES (3, 1, 50);
