@@ -84,14 +84,34 @@
         <h3>Choose Attributes to View:</h3>
         <form method="GET" action="database.php"> <!--refresh page when submitted-->
             <input type="hidden" id="projectQueryRequest" name="projectQueryRequest">
-            <label>Select table:</label>
+            <label>Select a relation:</label>
             <select name="projectTable">
                 <option value='UserProfile'>User Profile</option>
                 <option value='UserInfo'>User Info</option>
                 <option value='FriendOf'>Friends</option>
                 <option value='SupportTicketStatus'>SupportTicketStatus</option>
                 <option value='SupportTicketRequest'>SupportTicketRequest</option>
+                <option value='CompanyRevenue'>CompanyRevenue</option>
+                <option value='CompanyInfo'>CompanyInfo</option>
+                <option value='Publisher'>Publisher</option>
+                <option value='Developer'>Developer</option>
+                <option value='GamePrice'>GamePrice</option>
+                <option value='GameURL'>GameURL</option>
+                <option value='GameInfo'>GameInfo</option>
+                <option value='own'>Own</option>
+                <option value='GenreUpdate'>GenreUpdate</option>
+                <option value='GenreName'>GameName</option>
+                <option value='GenreDescription'>GenreDescription</option>
+                <option value='BelongsTo'>BelongsTo</option>
+                <option value='ReviewWriteAssociateUser'>ReviewWriteAssociateUser</option>
+                <option value='ReviewWriteAssociateContent'>ReviewWriteAssociateContent</option>
+                <option value='CommunityAssociate'>CommunityAssociate</option>
+                <option value='Participate'>Participate</option>
+                <option value='SalesEventDate'>SalesEventDate</option>
+                <option value='SalesEventContent'>SalesEventContent</option>
+                <option value='DiscountAssociate'>DiscountAssociate</option>
             </select>
+            <p>Select one table, click submit, fill in checkboxes and make sure choose the desired table again.</p>
             <br><br>
             <label>Select attributes:</label><br>
             <?php
@@ -104,7 +124,26 @@
                 'UserInfo' => array('Playtime', 'UserID', 'UserLocation', 'PhoneNum', 'Profile_URL'),
                 'FriendOf' => array('UserID', 'FUID'),
                 'SupportTicketStatus' => array('Description', 'Date_reported', 'UserID', 'Status'),
-                'SupportTicketRequest' => array('TID', 'Description', 'Date_reported', 'UserID')
+                'SupportTicketRequest' => array('TID', 'Description', 'Date_reported', 'UserID'),
+                'CompanyRevenue' => array('Name', 'Location', 'Revenue'),
+                'CompanyInfo' => array('CID', 'Email', 'Name', 'Location'),
+                'Publisher' => array('CPID', 'NumGamePublished'),
+                'Developer' => array('CDID', 'NumGameDeveloped'),
+                'GamePrice' => array('Name', 'Release_Date', 'Price'),
+                'GameURL' => array('URL', 'Name', 'Requirements', 'num_of_internal_achievement'),
+                'GameInfo' => array('GID', 'URL', 'gameDescription', 'CPID', 'CDID'),
+                'Own' => array('UserID', 'GID', 'ownDate', 'Ownership_type'),
+                'GenreUpdate' => array('Name', 'LastUpdatedDate'),
+                'GenreName' => array('Description', 'name'),
+                'GenreDescription' => array('GeID', 'Description'),
+                'BelongsTo' => array('GID', 'GeID'),
+                'ReviewWriteAssociateUser' => array('ReviewText', 'Rating', 'PostDate', 'UserID'),
+                'ReviewWriteAssociateContent' => array('RID', 'GID', 'ReviewText', 'PostDate'),
+                'CommunityAssociate' => array('CoID', 'GID', 'Title', 'Section'),
+                'Participate' => array('CoID', 'UserID'),
+                'SalesEventDate' => array('SalesDescription', 'StartDate'),
+                'SalesDescription' => array('SID', 'SalesDescription', 'CID'),
+                'DiscountAssociate' => array('GID', 'SID', 'DiscountPercentage')
             );
 
             // generate checkboxes for the attributes of the selected table
@@ -566,8 +605,9 @@
             echo "</tr>";
             while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
                 echo "<tr>";
-                foreach ($selectedAttributes as $attr) {
-                    echo "<td>" . $row[$attr] . "</td>";
+                for ($i = 0; $i < count($selectedAttributes); $i++) {
+                    $attr = $row[$i];
+                    echo "<th>$attr</th>";
                 }
                 echo "</tr>";
             }
