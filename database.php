@@ -59,13 +59,16 @@
     <!--Changed interpretation showing on the webpage-->
     <!-- <h2>UPDATE Query</h2> -->
     <h2>Update user location</h2>
+    <p>Please first provide your user ID, and then enter your new user name, new location or phone number. Please note that you cannot update your profile URL, creation date, account level, playtime, and user id. Please leave the entry box blank if you don't want to update that value. </p>
     <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
     <form method="POST" action="database.php"> <!--refresh page when submitted-->
         <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
         UserID: <input type="number" name="userID"> <br /><br />
+        New User Name: <input type="text" name="User_name" > <br /><br />
         New Location: <input type="text" name="newLoc"> <br /><br />
-
+        New Phone Number: <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+        <small>Format: 123-456-7890</small> <br /><br />
         <input type="submit" value="Update" name="updateSubmit"></p>
     </form>
 
@@ -526,13 +529,25 @@
             global $db_conn, $success;
 
             $user_id = $_POST['userID'];
+            $new_user_name = $_POST['User_name'];
             $new_location = $_POST['newLoc'];
+            $new_phone_number = $_POST['phone'];
+
+            $profileURL = 'https://steamcommunity.com/id/' . $user_id . '/';
 
             // you need the wrap the old name and new name values with single quotations
-            executePlainSQL("UPDATE UserInfo SET UserLocation='" . $new_location . "' WHERE UserID='" . $user_id . "'");
+            if ($new_user_name) {
+                 executePlainSQL("UPDATE UserProfile SET User_name='" . $new_user_name . "' WHERE Profile_URL='" . $profileURL . "'");
+            }
+            if ($new_location) {
+                 executePlainSQL("UPDATE UserInfo SET UserLocation='" . $new_location . "' WHERE UserID='" . $user_id . "'");
+            }
+            if ($new_phone_number) {
+                 executePlainSQL("UPDATE UserInfo SET PhoneNum='" . $new_phone_number . "' WHERE UserID='" . $user_id . "'");
+            }
             OCICommit($db_conn);
             if ($success) {
-                $message = "User location is updated";
+                $message = "User Information is updated";
             } else {
                 $message = "Action failed. Please try again";
             }
@@ -641,9 +656,10 @@
             global $db_conn;
 
             $result = executePlainSQL("
-            SELECT UserID, COUNT(*)
-            FROM Own
-            GROUP BY UserID
+            SELECT o.UserID, up.User_name, COUNT(*)
+            FROM Own o, UserProfile up, UserInfo ui
+            WHERE o.UserID = ui.UserID AND ui.Profile_URL = up.Profile_URL
+            GROUP BY o.UserID, up.User_name
         ");
             OCICommit($db_conn);
             echo "<table border = 1 cellspacing = 0 width = 400 height = 300>";
@@ -660,6 +676,7 @@
                 <tr>
                     <td>" . $row[0] . "</td> 
                     <td>" . $row[1] . "</td> 
+                    <td>" . $row[2] . "</td> 
                 <tr/>
             ";
             }
