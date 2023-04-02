@@ -83,82 +83,82 @@
     </form>
     <hr />
 
-    <h2>PROJECTION Query</h3>
-        <h3>Choose Attributes to View:</h3>
-        <form method="GET" action="database.php"> <!--refresh page when submitted-->
-            <input type="hidden" id="projectQueryRequest" name="projectQueryRequest">
-            <label>Select a relation:</label>
-            <select name="projectTable">
-                <option value='UserProfile'>User Profile</option>
-                <option value='UserInfo'>User Info</option>
-                <option value='FriendOf'>Friends</option>
-                <option value='SupportTicketStatus'>SupportTicketStatus</option>
-                <option value='SupportTicketRequest'>SupportTicketRequest</option>
-                <option value='CompanyRevenue'>CompanyRevenue</option>
-                <option value='CompanyInfo'>CompanyInfo</option>
-                <option value='Publisher'>Publisher</option>
-                <option value='Developer'>Developer</option>
-                <option value='GamePrice'>GamePrice</option>
-                <option value='GameURL'>GameURL</option>
-                <option value='GameInfo'>GameInfo</option>
-                <option value='own'>Own</option>
-                <option value='GenreUpdate'>GenreUpdate</option>
-                <option value='GenreName'>GameName</option>
-                <option value='GenreDescription'>GenreDescription</option>
-                <option value='BelongsTo'>BelongsTo</option>
-                <option value='ReviewWriteAssociateUser'>ReviewWriteAssociateUser</option>
-                <option value='ReviewWriteAssociateContent'>ReviewWriteAssociateContent</option>
-                <option value='CommunityAssociate'>CommunityAssociate</option>
-                <option value='Participate'>Participate</option>
-                <option value='SalesEventDate'>SalesEventDate</option>
-                <option value='SalesEventContent'>SalesEventContent</option>
-                <option value='DiscountAssociate'>DiscountAssociate</option>
-            </select>
-            <p>Select one table, click submit, fill in checkboxes and make sure choose the desired table again.</p>
-            <br><br>
-            <label>Select attributes:</label><br>
-            <?php
-            // retrieve the selected table from the GET request
-            $tableName = $_GET['projectTable'];
+    <!-- <h2>PROJECTION Query</h3> -->
+    <h2>Choose Attributes to View:</h2>
+    <form method="GET" action="database.php"> <!--refresh page when submitted-->
+        <input type="hidden" id="projectQueryRequest" name="projectQueryRequest">
+        <label>Select a relation:</label>
+        <select name="projectTable">
+            <option value='UserProfile'>User Profile</option>
+            <option value='UserInfo'>User Info</option>
+            <option value='FriendOf'>Friends</option>
+            <option value='SupportTicketStatus'>SupportTicketStatus</option>
+            <option value='SupportTicketRequest'>SupportTicketRequest</option>
+            <option value='CompanyRevenue'>CompanyRevenue</option>
+            <option value='CompanyInfo'>CompanyInfo</option>
+            <option value='Publisher'>Publisher</option>
+            <option value='Developer'>Developer</option>
+            <option value='GamePrice'>GamePrice</option>
+            <option value='GameURL'>GameURL</option>
+            <option value='GameInfo'>GameInfo</option>
+            <option value='own'>Own</option>
+            <option value='GenreUpdate'>GenreUpdate</option>
+            <option value='GenreName'>GameName</option>
+            <option value='GenreDescription'>GenreDescription</option>
+            <option value='BelongsTo'>BelongsTo</option>
+            <option value='ReviewWriteAssociateUser'>ReviewWriteAssociateUser</option>
+            <option value='ReviewWriteAssociateContent'>ReviewWriteAssociateContent</option>
+            <option value='CommunityAssociate'>CommunityAssociate</option>
+            <option value='Participate'>Participate</option>
+            <option value='SalesEventDate'>SalesEventDate</option>
+            <option value='SalesEventContent'>SalesEventContent</option>
+            <option value='DiscountAssociate'>DiscountAssociate</option>
+        </select>
+        <p>Select one table, click submit, fill in checkboxes and make sure choose the desired table again.</p>
+        <br><br>
+        <label>Select attributes:</label><br>
+        <?php
+        // retrieve the selected table from the GET request
+        $tableName = $_GET['projectTable'];
 
-            // create an array of attributes for each table
-            $attributes = array(
-                'UserProfile' => array('Profile_URL', 'User_name', 'Creation_Date', 'Account_Level'),
-                'UserInfo' => array('Playtime', 'UserID', 'UserLocation', 'PhoneNum', 'Profile_URL'),
-                'FriendOf' => array('UserID', 'FUID'),
-                'SupportTicketStatus' => array('Description', 'Date_reported', 'UserID', 'Status'),
-                'SupportTicketRequest' => array('TID', 'Description', 'Date_reported', 'UserID'),
-                'CompanyRevenue' => array('Name', 'Location', 'Revenue'),
-                'CompanyInfo' => array('CID', 'Email', 'Name', 'Location'),
-                'Publisher' => array('CPID', 'NumGamePublished'),
-                'Developer' => array('CDID', 'NumGameDeveloped'),
-                'GamePrice' => array('Name', 'Release_Date', 'Price'),
-                'GameURL' => array('URL', 'Name', 'Requirements', 'num_of_internal_achievement'),
-                'GameInfo' => array('GID', 'URL', 'gameDescription', 'CPID', 'CDID'),
-                'Own' => array('UserID', 'GID', 'ownDate', 'Ownership_type'),
-                'GenreUpdate' => array('Name', 'LastUpdatedDate'),
-                'GenreName' => array('Description', 'name'),
-                'GenreDescription' => array('GeID', 'Description'),
-                'BelongsTo' => array('GID', 'GeID'),
-                'ReviewWriteAssociateUser' => array('ReviewText', 'Rating', 'PostDate', 'UserID'),
-                'ReviewWriteAssociateContent' => array('RID', 'GID', 'ReviewText', 'PostDate'),
-                'CommunityAssociate' => array('CoID', 'GID', 'Title', 'Section'),
-                'Participate' => array('CoID', 'UserID'),
-                'SalesEventDate' => array('SalesDescription', 'StartDate'),
-                'SalesDescription' => array('SID', 'SalesDescription', 'CID'),
-                'DiscountAssociate' => array('GID', 'SID', 'DiscountPercentage')
-            );
+        // create an array of attributes for each table
+        $attributes = array(
+            'UserProfile' => array('Profile_URL', 'User_name', 'Creation_Date', 'Account_Level'),
+            'UserInfo' => array('Playtime', 'UserID', 'UserLocation', 'PhoneNum', 'Profile_URL'),
+            'FriendOf' => array('UserID', 'FUID'),
+            'SupportTicketStatus' => array('Description', 'Date_reported', 'UserID', 'Status'),
+            'SupportTicketRequest' => array('TID', 'Description', 'Date_reported', 'UserID'),
+            'CompanyRevenue' => array('Name', 'Location', 'Revenue'),
+            'CompanyInfo' => array('CID', 'Email', 'Name', 'Location'),
+            'Publisher' => array('CPID', 'NumGamePublished'),
+            'Developer' => array('CDID', 'NumGameDeveloped'),
+            'GamePrice' => array('Name', 'Release_Date', 'Price'),
+            'GameURL' => array('URL', 'Name', 'Requirements', 'num_of_internal_achievement'),
+            'GameInfo' => array('GID', 'URL', 'gameDescription', 'CPID', 'CDID'),
+            'Own' => array('UserID', 'GID', 'ownDate', 'Ownership_type'),
+            'GenreUpdate' => array('Name', 'LastUpdatedDate'),
+            'GenreName' => array('Description', 'name'),
+            'GenreDescription' => array('GeID', 'Description'),
+            'BelongsTo' => array('GID', 'GeID'),
+            'ReviewWriteAssociateUser' => array('ReviewText', 'Rating', 'PostDate', 'UserID'),
+            'ReviewWriteAssociateContent' => array('RID', 'GID', 'ReviewText', 'PostDate'),
+            'CommunityAssociate' => array('CoID', 'GID', 'Title', 'Section'),
+            'Participate' => array('CoID', 'UserID'),
+            'SalesEventDate' => array('SalesDescription', 'StartDate'),
+            'SalesDescription' => array('SID', 'SalesDescription', 'CID'),
+            'DiscountAssociate' => array('GID', 'SID', 'DiscountPercentage')
+        );
 
-            // generate checkboxes for the attributes of the selected table
-            foreach ($attributes[$tableName] as $attribute) {
-                echo "<label><input type='checkbox' name='projectAttributes[]' value='$attribute'> $attribute </label><br>";
-            }
-            ?>
-            <br>
-            <input type="submit" value="Submit" name="projectSubmit"></p>
-        </form>
+        // generate checkboxes for the attributes of the selected table
+        foreach ($attributes[$tableName] as $attribute) {
+            echo "<label><input type='checkbox' name='projectAttributes[]' value='$attribute'> $attribute </label><br>";
+        }
+        ?>
+        <br>
+        <input type="submit" value="Submit" name="projectSubmit"></p>
+    </form>
 
-        <hr />
+    <hr />
 
         <!-- <h2>JOIN Query</h2> -->
         <h2>Search which games are under a specific genre</h2>
