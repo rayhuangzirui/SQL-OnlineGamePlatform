@@ -256,15 +256,15 @@ VALUES (300.0, 2, 'USA', '206-780-4576', 'https://steamcommunity.com/id/2/');
 
 INSERT
 INTO  UserInfo
-VALUES (2560.0, 3, 'Japan', '080-3451-6048', 'https://steamcommunity.com/id/3/');
+VALUES (2560.0, 3, 'USA', '080-345-6048', 'https://steamcommunity.com/id/3/');
 
 INSERT
 INTO  UserInfo
-VALUES (5000.0, 4, 'Argentina', '(11)2530-8761', 'https://steamcommunity.com/id/4/');
+VALUES (5000.0, 4, 'USA', '112-530-8761', 'https://steamcommunity.com/id/4/');
 
 INSERT
 INTO UserInfo
-VALUES (8920.0, 5, 'Turkey', '00-90-56788701', 'https://steamcommunity.com/id/5/');
+VALUES (8920.0, 5, 'Canada', '009-056-8701', 'https://steamcommunity.com/id/5/');
 
 INSERT
 INTO FriendOf
@@ -457,7 +457,7 @@ VALUES (3, 'Winter sale 2022', 2);
 
 INSERT 
 INTO SalesEventContent
-VALUES (4, 'Sports Fest', 4);
+VALUES (4, 'Sports Fest', 2);
 
 INSERT 
 INTO SalesEventContent

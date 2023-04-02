@@ -33,22 +33,22 @@
 
     <hr />
 
-    <h2>INSERT Query</h2>
-    <h3> Insert a new user</h3>
+    <!-- <h2>INSERT Query</h2> -->
+    <h2> Insert a new user</h2>
     <form method="POST" action="database.php"> <!--refresh page when submitted-->
         <input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
         ID: <input type="number" name="UserID"> <br /><br /> <!--number input-->
         Location: <input type="text" name="UserLocation"> <br /><br />
-        Phone Number: <input type="text" name="PhoneNum"> <br /><br />
+        Phone Number: <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"required>
+        <small>Format: 123-456-7890</small> <br /><br />
         User name: <input type="text" name="User_name"> <br /><br />
-
         <input type="submit" value="Insert" name="insertSubmit"></p>
     </form>
 
     <hr />
 
-    <h2>DELETE Query</h2>
-    <h3>Delete a User</h3>
+    <!-- <h2>DELETE Query</h2> -->
+    <h2>Delete a User</h2>
     <form method="POST" action="database.php"> <!--refresh page when submitted-->
         <input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
         User ID : <input type="number" name="deleteUserID"> <br /><br />
@@ -57,13 +57,13 @@
     <hr />
 
     <!--Changed interpretation showing on the webpage-->
-    <h2>UPDATE Query</h2>
-    <h3>Update user location</h3>
+    <!-- <h2>UPDATE Query</h2> -->
+    <h2>Update user location</h2>
     <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
     <form method="POST" action="database.php"> <!--refresh page when submitted-->
         <input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-        UserID: <input type="text" name="userID"> <br /><br />
+        UserID: <input type="number" name="userID"> <br /><br />
         New Location: <input type="text" name="newLoc"> <br /><br />
 
         <input type="submit" value="Update" name="updateSubmit"></p>
@@ -71,8 +71,8 @@
 
     <hr />
 
-    <h2>SELECTION Query</h2>
-    <h3>Find all the games below a specific price </h3>
+    <!-- <h2>SELECTION Query</h2> -->
+    <h2>Find all the games below a specific price </h2>
     <form method="GET" action="database.php"> <!--refresh page when submitted-->
         <input type="hidden" id="selectionQueryRequest" name="selectionQueryRequest">
         Price: <input type="number" step="0.001" name="Price"> <br /><br />
@@ -118,8 +118,8 @@
 
         <hr />
 
-        <h2>JOIN Query</h2>
-        <h3>Search which games are under a specific genre</h3>
+        <!-- <h2>JOIN Query</h2> -->
+        <h2>Search which games are under a specific genre</h2>
         <form method="GET" action="database.php"> <!--refresh page when submitted-->
             <input type="hidden" id="joinQueryRequest" name="joinQueryRequest">
             Genre : <select name="joinGenre">
@@ -134,16 +134,16 @@
         <hr />
 
 
-        <h2>Aggregation with GROUP BY Query</h2>
-        <h3>Count the number of games each user have </h3>
+        <!-- <h2>Aggregation with GROUP BY Query</h2> -->
+        <h2>Count the number of games each user have </h2>
         <form method="GET" action="database.php"> <!--refresh page when submitted-->
             <input type="hidden" id="aggregationGroupByQueryRequest" name="aggregationGroupByQueryRequest">
             <input type="submit" value="Find" name="aggGroupBySubmit"></p>
         </form>
         <hr />
 
-        <h2>Aggregation with HAVING Query</h2>
-        <h3>Find how many people are playing the specific genre of game </h3>
+        <!-- <h2>Aggregation with HAVING Query</h2> -->
+        <h2>Find how many people are playing the specific genre of game </h2>
         <form method="GET" action="database.php"> <!--refresh page when submitted-->
             <input type="hidden" id="HavingQueryRequest" name="HavingQueryRequest">
             Genre : <select name="Genren">
@@ -157,17 +157,18 @@
         </form>
         <hr />
 
-        <h2>Nested Aggregation with GROUP BY Query</h2>
-        <h3>Find average prices for the genres that have more than 1 games </h3>
+        <!-- <h2>Nested Aggregation with GROUP BY Query</h2> -->
+        <h2>Find average prices for the genres that have more than 1 games </h2>
         <form method="GET" action="database.php"> <!--refresh page when submitted-->
             <input type="hidden" id="nestedQueryRequest" name="nestedQueryRequest">
             <input type="submit" value="Find" name="nestedSubmit"></p>
         </form>
 
         <hr />
-        <h2>Division</h2>
-        <p>Find the company name who've participated all the sales events</p>
-        <form method="GET" action="oracle-test1.php"> <!--refresh page when submitted-->
+
+        <!-- <h2>Division Query</h2> -->
+        <h2>Find the company name who've participated all the sales events</h2>
+        <form method="GET" action="database.php"> <!--refresh page when submitted-->
             <input type="hidden" id="DivisionQueryRequest" name="DivisionQueryRequest">
             <input type="submit" value="Find" name="DivisionSubmit"></p>
         </form>
@@ -609,6 +610,7 @@
             echo "
             <tr>
                 <th>User ID</th>
+                <th>User Name</th>
                 <th>Number of Games</th>
             </tr>
         ";
