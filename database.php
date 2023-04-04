@@ -163,7 +163,6 @@
             $selectedAttri = $_GET['projectAttributes'];
             foreach ($selectedAttri as $attribute) {
                 if (!in_array($attribute, $attributes[$tableName])) {
-                    // display an error message and exit the script
                     echo "<p style='color:red;'>Error: The attribute '$attribute' does not belong to the table '$tableName'.</p>";
                 }
                 // echo "<label><input type='checkbox' name='projectAttributes[]' value='$attribute'> $attribute </label><br>";
