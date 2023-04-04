@@ -58,7 +58,7 @@
 
     <!--Changed interpretation showing on the webpage-->
     <!-- <h2>UPDATE Query</h2> -->
-    <h2>Update user location</h2>
+    <h2>Update user information</h2>
     <p>Please first provide your user ID, and then enter your new user name, new location or phone number. Please note that you cannot update your profile URL, creation date, account level, playtime, and user id. Please leave the entry box blank if you don't want to update that value. </p>
     <p>The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
@@ -472,7 +472,7 @@
 
         // Your username is ora_(CWL_ID) and the password is a(student number). For example,
         // ora_platypus is the username and a12345678 is the password.
-        $db_conn = OCILogon("ora_lunawwy", "a97806434", "dbhost.students.cs.ubc.ca:1522/stu");
+        $db_conn = OCILogon("ora_hzr01", "a79217667", "dbhost.students.cs.ubc.ca:1522/stu");
 
         if ($db_conn) {
             debugAlertMessage("Database is Connected");
@@ -553,8 +553,8 @@
         $new_phone_number = $_POST['phone'];
 
         $profileURL = 'https://steamcommunity.com/id/' . $user_id . '/';
-
-        // you need the wrap the old name and new name values with single quotations
+        $result = executePlainSQL("SELECT UserID FROM UserInfo");
+        
         if ($new_user_name) {
             executePlainSQL("UPDATE UserProfile SET User_name='" . $new_user_name . "' WHERE Profile_URL='" . $profileURL . "'");
         }
@@ -565,13 +565,23 @@
             executePlainSQL("UPDATE UserInfo SET PhoneNum='" . $new_phone_number . "' WHERE UserID='" . $user_id . "'");
         }
         OCICommit($db_conn);
-        if ($success) {
-            $message = "User Information is updated";
-        } else {
-            $message = "Action failed. Please try again";
+        while ($row = oci_fetch_array($result, OCI_BOTH)) {
+            $users[] = $row[0];
         }
-        printResult();
-        echo "<script>alert('" . $message . "')</script>";
+        // you need the wrap the old name and new name values with single quotations
+        if (!in_array($user_id, $users)) {
+            echo "<p style='color:red;'> Error: User with ID $user_id does not exist! </p>";
+        } else {
+
+            echo "User Information is successfully updated";
+            printResult();
+        }
+        // if ($success) {
+        //     $message = "User Information is updated";
+        // } else {
+        //     $message = "Action failed. Please try again";
+        // }
+        // echo "<script>alert('" . $message . "')</script>";
     }
 
     function handleResetRequest()
@@ -657,28 +667,24 @@
         // if ($profileURL == 'https://steamcommunity.com/id/5/')
         //     echo 'this';
         $result = executePlainSQL("SELECT UserID FROM UserInfo");
-        executePlainSQL("DELETE FROM UserProfile up WHERE up.Profile_URL = '" . $profileURL . "'");
-
+        executePlainSQL("DELETE FROM UserProfile WHERE Profile_URL = '" . $profileURL . "'");
+        
         OCICommit($db_conn);
+
         while ($row = oci_fetch_array($result, OCI_BOTH)) {
-            $userArray[] = $row['ID'];
+            $userArray[] = $row[0];
         }
+
         if (!in_array($userID, $userArray)) {
             echo "<p style='color:red;'>Error: User with ID $userID does not exist! </p>";
         } else {
-            executePlainSQL("DELETE FROM UserInfo WHERE ID = $userID");
+            // executePlainSQL("DELETE FROM UserInfo WHERE UserID = $userID");
             echo "User with ID $userID has been deleted.";
             printResult();
+
+            // print_r($userArray);
         }
 
-        // if ($success) {
-        //     $message = "User ". $userID ." is deleted";
-        // } else {
-        //     $message = "Action failed, User". $userID ." does not exist!";
-        //     $success = false;
-        // }
-        // echo "<script>alert('" . $message . "')</script>";
-        // echo $message;
     }
 
     function handleAggGroupByRequest()
