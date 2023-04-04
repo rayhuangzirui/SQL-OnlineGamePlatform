@@ -74,18 +74,15 @@
 
     <hr />
 
-    <!-- <h2>SELECTION Query</h2> -->
-    <h2>Find all the games below a specific price </h2>
-    <form method="GET" action="database.php"> <!--refresh page when submitted-->
-        <input type="hidden" id="selectionQueryRequest" name="selectionQueryRequest">
-        <!-- Price: <input type="number" step="0.001" name="Price"> <br /><br />
-        <input type="submit" value="Select" name="selectionSubmit"></p> -->
+    <h2>SELECTION Query</h2>
+    <h3>Find all the games below a specific price or released before a specific date</h3>
+    <form method="GET" action="oracle-test1.php">
+        <input type="hidden" id="SelectionQueryRequest" name="SelectionQueryRequest" value="selectionQueryRequest">
         <input type="checkbox" id="Price" name="attri[]" value="Price">
         Price: <input type="number" for="Price" step="0.001" name="PriceInput"><br>
-        <input type="checkbox" id="releaseDate" name="attri[]" value="releaseDate">
-        Release Date (Fromat: 02-FEB-2023): <input type="text" for="releaseDate" id="releaseDateInput" name="releaseDateInput"><br>
+        <input type="checkbox" id="Release_Date" name="attri[]" value="Release_Date">
+        Release Date (Fromat: 02-FEB-2023): <input type="text" for="Release_Date" id="releaseDateInput" name="releaseDateInput"><br>
         <input type="submit" value="Select" name="selectionSubmit">
-
     </form>
     <hr />
 
@@ -154,7 +151,7 @@
             'SalesDescription' => array('SID', 'SalesDescription', 'CID'),
             'DiscountAssociate' => array('GID', 'SID', 'DiscountPercentage')
         );
-        
+
         foreach ($attributes[$tableName] as $attribute) {
             echo "<label><input type='checkbox' name='projectAttributes[]' value='$attribute'> $attribute </label><br>";
         }
@@ -341,64 +338,36 @@
         echo "</table>";
     }
 
-    // function handleSelectionRequest()
-    // {
-    //     global $db_conn;
-
-    //     $result = executePlainSQL("
-    //         SELECT Name, Price
-    //         FROM GamePrice
-    //         WHERE Price < '{$_GET['Price']}'
-    //     ");
-    //     OCICommit($db_conn);
-    //     echo "<br>Retrieved data from GamePrice table:<br>";
-    //     echo "<table border = 1 cellspacing = 0 width = 400 height = 300>";
-    //     echo "
-    //         <tr>
-    //             <th>Name</th>
-    //             <th>Price</th>
-    //         </tr>
-    //     ";
-
-    //     while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
-    //         echo "<tr>
-    //             <td>" . $row[0] . "</td> 
-    //             <td>" . $row[1] . "</td> 
-    //             </tr>";
-    //     }
-    //     echo "</table>";
-
-    //     OCICommit($db_conn);
-    // }
 
     function handleSelectionRequest($selectedAttri)
     {
         global $db_conn;
         $selectedColumns = implode(", ", $selectedAttri);
-        echo "$selectedColumns";
-        if ($selectedColumns == 'Release_Date, Price') {
-            $price = $_POST['priceInput'];
-            $releaseDate = $_POST['releaseDateInput'];
-            $result = executePlainSQL("SELECT $selectedColumns FROM GamePrice WHERE Release_Date < '{$releaseDate}' AND Price < '{$price}' ");
-        } else if ($selectedColumns == 'Release_Date') {
-            $releaseDate = $_POST['releaseDateInput'];
-            $result = executePlainSQL("SELECT $selectedColumns FROM GamePrice WHERE Release_Date < '{$releaseDate}'");
-        } else if ($selectedColumns == 'Price') {
-            $price = $_POST['priceInput'];
-            $result = executePlainSQL("SELECT $selectedColumns FROM GamePrice WHERE Price < '{$price}' ");
+        $price = $_GET['PriceInput'];
+        $releaseDate = $_GET['releaseDateInput'];
+
+        if ($price && $releaseDate) {
+            $result = executePlainSQL("SELECT Name, $selectedColumns FROM GamePrice WHERE Release_Date < TO_DATE('" . $releaseDate . "') AND Price < $price");
+        } else if ($price) {
+            $result = executePlainSQL("SELECT Name, $selectedColumns FROM GamePrice WHERE Price < $price");
+        } else if ($releaseDate) {
+            $result = executePlainSQL("SELECT Name, $selectedColumns FROM GamePrice WHERE Release_Date < TO_DATE('" . $releaseDate . "')");
         }
 
         OCICommit($db_conn);
         echo "<table border='1' cellspacing='0' width='400' height='300'>";
         echo "<caption>Selection Results</caption>";
         echo "<tr>";
+        echo "<th>Game Name</th>";
         foreach ($selectedAttri as $attr) {
             echo "<th>$attr</th>";
         }
         echo "</tr>";
+
         while ($row = OCI_Fetch_Array($result, OCI_BOTH)) {
             echo "<tr>";
-            for ($i = 0; $i < count($selectedAttri); $i++) {
+            echo "<th>" . $row[0] . "</th>";
+            for ($i = 1; $i <= count($selectedAttri); $i++) {
                 echo "<th>$row[$i]</th>";
             }
             echo "</tr>";
