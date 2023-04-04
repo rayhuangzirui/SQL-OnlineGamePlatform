@@ -121,10 +121,9 @@
         <br><br>
         <label>Select attributes:</label><br>
         <?php
-        // retrieve the selected table from the GET request
+
         $tableName = $_GET['projectTable'];
 
-        // create an array of attributes for each table
         $attributes = array(
             'UserProfile' => array('Profile_URL', 'User_name', 'Creation_Date', 'Account_Level'),
             'UserInfo' => array('Playtime', 'UserID', 'UserLocation', 'PhoneNum', 'Profile_URL'),
@@ -162,7 +161,6 @@
                 if (!in_array($attribute, $attributes[$tableName])) {
                     echo "<p style='color:red;'>Error: The attribute '$attribute' does not belong to the table '$tableName'.</p>";
                 }
-                // echo "<label><input type='checkbox' name='projectAttributes[]' value='$attribute'> $attribute </label><br>";
             }
         }
         ?>
@@ -658,18 +656,29 @@
         $profileURL = 'https://steamcommunity.com/id/' . $userID . '/';
         // if ($profileURL == 'https://steamcommunity.com/id/5/')
         //     echo 'this';
-
+        $result = executePlainSQL("SELECT UserID FROM UserInfo");
         executePlainSQL("DELETE FROM UserProfile up WHERE up.Profile_URL = '" . $profileURL . "'");
 
         OCICommit($db_conn);
-
-        if ($success) {
-            $message = "User is deleted";
-        } else {
-            $message = "Action failed. Please try again";
+        while ($row = oci_fetch_array($result, OCI_BOTH)) {
+            $userArray[] = $row['ID'];
         }
-        printResult();
-        echo "<script>alert('" . $message . "')</script>";
+        if (!in_array($userID, $userArray)) {
+            echo "<p style='color:red;'>Error: User with ID $userID does not exist! </p>";
+        } else {
+            executePlainSQL("DELETE FROM UserInfo WHERE ID = $userID");
+            echo "User with ID $userID has been deleted.";
+            printResult();
+        }
+
+        // if ($success) {
+        //     $message = "User ". $userID ." is deleted";
+        // } else {
+        //     $message = "Action failed, User". $userID ." does not exist!";
+        //     $success = false;
+        // }
+        // echo "<script>alert('" . $message . "')</script>";
+        // echo $message;
     }
 
     function handleAggGroupByRequest()
