@@ -76,7 +76,7 @@
 
     <h2>SELECTION Query</h2>
     <h3>Find all the games below a specific price or released before a specific date</h3>
-    <form method="GET" action="oracle-test1.php">
+    <form method="GET" action="database.php">
         <input type="hidden" id="SelectionQueryRequest" name="SelectionQueryRequest" value="selectionQueryRequest">
         <input type="checkbox" id="Price" name="attri[]" value="Price">
         Price: <input type="number" for="Price" step="0.001" name="PriceInput"><br>
