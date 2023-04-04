@@ -798,7 +798,7 @@
 
     if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['deleteSubmit']) || isset($_POST['initializeSubmit'])) {
         handlePOSTRequest();
-    } else if (isset($_GET['countTupleRequest']) || isset($_GET['joinQueryRequest']) || isset($_GET['selectionQueryRequest']) || isset($_GET['aggregationGroupByQueryRequest']) || isset($_GET['HavingQueryRequest']) || isset($_GET['projectQueryRequest']) || isset($_GET['nestedQueryRequest']) || isset($_GET['DivisionQueryRequest'])) {
+    } else if (isset($_GET['countTupleRequest']) || isset($_GET['joinQueryRequest']) || isset($_GET['SelectionQueryRequest']) || isset($_GET['aggregationGroupByQueryRequest']) || isset($_GET['HavingQueryRequest']) || isset($_GET['projectQueryRequest']) || isset($_GET['nestedQueryRequest']) || isset($_GET['DivisionQueryRequest'])) {
         handleGETRequest();
     }
     ?>
