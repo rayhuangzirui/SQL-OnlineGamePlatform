@@ -148,7 +148,7 @@
             'CommunityAssociate' => array('CoID', 'GID', 'Title', 'Section'),
             'Participate' => array('CoID', 'UserID'),
             'SalesEventDate' => array('SalesDescription', 'StartDate'),
-            'SalesDescription' => array('SID', 'SalesDescription', 'CID'),
+            'SalesEventContent' => array('SID', 'SalesDescription', 'CID'),
             'DiscountAssociate' => array('GID', 'SID', 'DiscountPercentage')
         );
 
