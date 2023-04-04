@@ -83,6 +83,19 @@
         <input type="checkbox" id="Release_Date" name="attri[]" value="Release_Date">
         Release Date (Fromat: 02-FEB-2023): <input type="text" for="Release_Date" id="releaseDateInput" name="releaseDateInput"><br>
         <input type="submit" value="Select" name="selectionSubmit">
+        <?php
+            $price = $_GET['PriceInput'];
+            $releaseDate = $_GET['releaseDateInput'];
+            if ($releaseDate && !DateTime::createFromFormat('d-M-Y', $releaseDate)) {
+                echo "<p style='color: red;'>Invalid release date input. Please enter a valid date in the format DD-MMM-YYYY. </p>";
+            
+            }
+    
+            if ($price && $price < 0) {
+                echo "<p style='color: red;'>Invalid price input. Please enter a non-negative value. </p>";
+
+            }
+        ?>
     </form>
     <hr />
 
@@ -343,6 +356,15 @@
         $selectedColumns = implode(", ", $selectedAttri);
         $price = $_GET['PriceInput'];
         $releaseDate = $_GET['releaseDateInput'];
+        // if ($releaseDate && !DateTime::createFromFormat('d-M-Y', $releaseDate)) {
+        //     echo "<p style='color: red;'>Invalid release date input. Please enter a valid date in the format DD-MMM-YYYY. </p>";
+        //     return;
+        // }
+
+        // if ($price && $price < 0) {
+        //     echo "<p style='color: red;'>Invalid price input. Please enter a non-negative value. </p>";
+        //     return;
+        // }
 
         if ($price && $releaseDate) {
             $result = executePlainSQL("SELECT Name, $selectedColumns FROM GamePrice WHERE Release_Date < TO_DATE('" . $releaseDate . "') AND Price < $price");
