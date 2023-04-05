@@ -528,7 +528,7 @@
             ":Playtime" => $Playtime,
             ":UserID" => $_POST['UserID'],
             ":UserLocation" => $_POST['UserLocation'],
-            ":PhoneNum" => $_POST['PhoneNum'],
+            ":PhoneNum" => $_POST['phone'],
             ":Profile_URL" => $Profile_URL
 
         );
