@@ -1,4 +1,5 @@
 # 🎮Steam Games Database🎮
+Website: https://www.students.cs.ubc.ca/~lunawwy/project_j5f7u_q2s1u_s6j0y/database.php
 ## Project Description 📝
 This project will focus on Steam, a popular online game distribution platform launched in 2003. Unlike regular retail business and online shopping, the Steam platform includes many other functions for the users/players like “Community” and “Sales Event”. Thus, instead of focusing on the transaction, our group wants to focus on the domain of user habit. For example, we will include several entities like user, community, company, sales event, genre, support ticket, and game. More details about their relationships and assumptions can be found in the ER Diagram section. 
 
